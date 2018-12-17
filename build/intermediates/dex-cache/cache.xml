@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="C:\Users\emerc\Desktop\Work\Projects\FittsTilt\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="af6916b3bf3828e570ef9ad25d5a9baac5ce8406">
+        <dex dex="C:\Users\emerc\Desktop\Work\Projects\FittsTilt\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run-bootstrap_25f4dd824d2e3b9767994ede4be00f5d8b9c2417\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\emerc\Desktop\Work\Projects\FittsTilt\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="3be78ebc2706b2e1fe2f12d5726887a92d6c183b">
+        <dex dex="C:\Users\emerc\Desktop\Work\Projects\FittsTilt\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run_c22a4d3823178a50e2c9a39e0b81010dc98fcc6e\classes.dex" />
+    </item>
+
+</items>

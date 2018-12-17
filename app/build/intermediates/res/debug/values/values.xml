@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- From: file:/C:/Users/mack/Desktop/Scott-new/Java/AndroidStudioStuff/FittsTilt/app/src/main/res/values/strings.xml -->
+    <eat-comment/>
+    <string name="app_name">FittsTilt</string>
+    <string name="button01text">OK</string>
+    <string name="button02text">Save</string>
+    <string name="button03text">Exit</string>
+    <string name="paramauditoryfeedbacktext">Auditory feedback</string>
+    <string name="paramlabelamplitudetext">Target amplitude (A)</string>
+    <string name="paramlabelballscale">Ball scale</string>
+    <string name="paramlabelblocktext">Block code</string>
+    <string name="paramlabelconditiontext">Condition code</string>
+    <string name="paramlabelgrouptext">Group code</string>
+    <string name="paramlabelorderofcontroltext">Order of control</string>
+    <string name="paramlabelparttext">Participant code</string>
+    <string name="paramlabelselectionmodetext">Selection mode</string>
+    <string name="paramlabelsesstext">Session code</string>
+    <string name="paramlabeltargetstext">Number of targets</string>
+    <string name="paramlabeltiltgaintext">Tilt gain</string>
+    <string name="paramlabelwidthtext">Target width (W)</string>
+    <string name="paramvibrotactilefeedbacktext">Vibrotactile feedback</string>
+    <string name="setup_subtitle">(FittsTilt Experiment)</string>
+    <string name="setup_title">Setup</string>
+</resources>
