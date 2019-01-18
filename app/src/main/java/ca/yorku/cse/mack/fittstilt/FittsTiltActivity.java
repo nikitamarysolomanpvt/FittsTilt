@@ -1057,7 +1057,6 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
 
             } else if (orderOfControl.equals("Physics1"))
             {
-                // Rob: code for physics1 order of control here
                 float multiplier = 1  ; //Multiplier
                 float dPitch = Math.round(-pitch);
                 float dRoll = Math.round(-roll);
@@ -1132,46 +1131,223 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
 
 
 
-            } else if (orderOfControl.equals("Physics2"))
+            } else if (orderOfControl.equals("Friction"))
             {
+                /*
+                * Test Friction
+                * */
+//                float dPitch = Math.round(-pitch);
+//                float dRoll = Math.round(-roll);
+//
+//                DisplayMetrics displayMetrics = new DisplayMetrics();
+//                getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+//                int height = displayMetrics.heightPixels;
+//                int width = displayMetrics.widthPixels;
                 float dPitch = Math.round(-pitch);
                 float dRoll = Math.round(-roll);
+                float frictionX, frictionY;
+                if(moving_x || moving_y){
+                    frictionX = Float.parseFloat(frictionCoefficient)*(float)Math.cos(dRoll*DEGREES_TO_RADIANS);
+                    frictionY = Float.parseFloat(frictionCoefficient)*(float)Math.cos(dPitch*DEGREES_TO_RADIANS);
+                }
+                else{
+                    frictionX = ((float)abs(Math.tan(dRoll*DEGREES_TO_RADIANS)));
+                    frictionY = ((float)abs(Math.tan(dPitch*DEGREES_TO_RADIANS)));
+                }
+
+                float multiplier = 1  ; //Multiplier
+
                 DisplayMetrics displayMetrics = new DisplayMetrics();
                 getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
                 int height = displayMetrics.heightPixels;
                 int width = displayMetrics.widthPixels;
-                float friction_Coefficient = Float.parseFloat(frictionCoefficient);
-                float positionX_pixels = x - xCenter;
-                if(abs(Math.tan(dRoll*DEGREES_TO_RADIANS)) > friction_Coefficient){
-                    float accX = ((float)1-friction_Coefficient)*((float)386.09) * ((float)Math.sin(dRoll*DEGREES_TO_RADIANS));
-                    velocityX += dT * accX;
-                    positionX += dT * velocityX;
-                    positionX_pixels = positionX * displayMetrics.ydpi;
+                Display display = getWindowManager().getDefaultDisplay();
+                Point size = new Point();
+                display.getSize(size);
+                double x1 = Math.sqrt(Math.pow(width/displayMetrics.xdpi,2));
+                double y1 = Math.sqrt(Math.pow(height/displayMetrics.ydpi,2));
+
+                //Getting the position of X
+                float accX = ((float)5/7)*((float)386.09) * ((float)Math.sin(dRoll*DEGREES_TO_RADIANS));
+                float velocityX;
+                float positionX = 0f;
+                velocityX = (velocityInitX + accX*dT) - ((frictionX)*(velocityInitX + accX*dT));
+                float dX = velocityX*dT;
+                float oldPositionX = positionX;
+                positionX =positionInitX + dX*multiplier + (1/2 * accX * (float)Math.pow(dT,2));
+                //positionX =positionInitX + dX*multiplier;
+                float positionX_pixels = positionX * displayMetrics.xdpi;
+                Log.d("pixels", "Velocity X:"+ velocityX+" X:"+positionX+" displayMetrics:"+positionX_pixels);
+                if(abs(positionX) > (width/2)) positionX = oldPositionX;
+
+
+
+                //Getting the position of Y
+                float accY = ((float)5/7)*((float)386.09) * ((float)Math.sin(dPitch*DEGREES_TO_RADIANS));
+                float velocityY;
+                float positionY = positionInitY;
+                velocityY = (velocityInitY + accY*dT) - ((frictionY)*(velocityInitY + accY*dT));
+                float dY = velocityY*dT;
+                float oldPosition = positionY;
+                positionY =positionInitY + dY*multiplier + (1/2 * accY * (float)Math.pow(dT, 2));
+                //positionY =positionInitY + dY*multiplier;
+                float positionY_pixels = positionY * displayMetrics.ydpi;
+                Log.d("pixels", "Velocity Y"+ velocityY+" Y:"+positionY+" displayMetrics:"+positionY_pixels);
+                if(abs(positionY) > (height/2)) positionY = oldPosition;
+
+                try {
+                    //Header Parameters: Time, X, Angle(Roll), Acceleration X, Velocity X, Position X * Mult,Y, Angle(Pitch), Acceleration Y, Velocity Y, Position X * Mult
+                    oldT = dT+oldT;
+                    sd4.write("\n"+oldT+","+x+","+dRoll+","+accX+","+velocityX+","+positionX+","+y+","+dPitch+","+accY+","+velocityY+","+positionY);
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
 
-                float positionY_pixels = y - yCenter;
-                if(abs(Math.tan(dRoll*DEGREES_TO_RADIANS)) > friction_Coefficient){
-                    float accY =  ((float)1-friction_Coefficient) * ((float)386.09) * ((float)Math.sin(dPitch*DEGREES_TO_RADIANS));
-                    velocityY += dT * accY;
-                    positionY += dT * velocityY;
-                    positionY_pixels = positionY * displayMetrics.ydpi;
-                }
 
                 if(x < width && x>=0) {
                     ep.xBall = xCenter + positionX_pixels;
                     positionInitX = positionX;
                     velocityInitX = velocityX - velocityInitX;
+                    if(velocityInitX > 0){
+                        moving_x = true;
+                    }
+                    else{
+                        moving_x = false;
+                    }
+
                 }
 
                 if(y <height && y>=0)
                 {
-                    ep.yBall = yCenter + positionY_pixels;
+                    ep.yBall =  yCenter + positionY_pixels;
                     positionInitY = positionY;
                     velocityInitY =  velocityY - velocityInitY;
+                    if(velocityInitY > 0){
+                        moving_y = true;
+                    }
+                    else{
+                        moving_y = false;
+                    }
+
                 }
 
+
+//                float friction;
+//
+//
+//                if(moving_y){
+//                    friction = ((float)386.09) * Float.parseFloat(frictionCoefficient) * ((float) Math.cos(dPitch*DEGREES_TO_RADIANS));
+//                }
+//                else{
+//                    float staticFrictionYCoefficient = ((float)Math.tan(dPitch*DEGREES_TO_RADIANS));
+//                    friction = ((float)386.09) * staticFrictionYCoefficient * ((float) Math.cos(dPitch*DEGREES_TO_RADIANS));
+//                }
+//
+//                float accY_NoFriction = ((float)386.09) * ((float)Math.sin(prevAngleY*DEGREES_TO_RADIANS));
+//                if(abs(accY_NoFriction) > abs(friction) && !(moving_y)){
+//                    moving_y = true;
+//
+//                }
+//                float accY;
+//                if(moving_y){
+//                    if(accY_NoFriction > 0){
+//                        if(accY_NoFriction - friction > 0){
+//                            accY = accY_NoFriction - friction;
+//                            moving_y = true;
+//                        }
+//                        else{
+//                            stop_y = true;
+//                            accY = accYInit;
+//                        }
+//                    }
+//                    else{
+//                        if(accY_NoFriction + friction < 0){
+//                            accY = accY_NoFriction + friction;
+//                            moving_y = true;
+//                        }
+//                        else{
+//                            stop_y = true;
+//                            accY = accYInit;
+//                        }
+//                    }
+//                }
+//                else{
+//                    accY=0;
+//                    moving_y = false;
+//                }
+//
+//                float velocityY;
+//                velocityY = velocityInitY + accY*dT;
+//                float dY = velocityY*dT;
+//                float positionY =positionInitY + dY + (1/2 * accY * (float)Math.pow(dT, 2));
+//                float positionY_pixels = positionY * displayMetrics.ydpi;
+//
+//
+//                float staticFrictionXCoefficient = ((float)Math.tan(dRoll*DEGREES_TO_RADIANS));
+//                float accX_NoFriction = ((float)386.09) * ((float)Math.sin(dRoll*DEGREES_TO_RADIANS));
+//                float accX;
+//                float frictionX;
+//
+//                if(moving_x || moving_y){
+//                    frictionX = ((float)386.09) * Float.parseFloat(frictionCoefficient) * ((float) Math.cos(dRoll*DEGREES_TO_RADIANS));
+//                }
+//                else{
+//                    frictionX = ((float)386.09) * staticFrictionXCoefficient * ((float) Math.cos(dRoll*DEGREES_TO_RADIANS));
+//                }
+//
+//                if(moving_x){
+//                    if(accX_NoFriction > 0){
+//                        if(accX_NoFriction - frictionX > 0){
+//                            accX = accX_NoFriction - (frictionX);
+//                            moving_x = true;
+//                        }
+//                        else{
+//                            accX = accXinit;
+//                            moving_x = false;
+//                        }
+//                    }
+//                    else{
+//                        if(accX_NoFriction + frictionX < 0){
+//                            accX = accX_NoFriction + (frictionX);
+//                            moving_x = true;
+//                        }
+//                        else{
+//                            accX = accXinit;
+//                            moving_x = false;
+//                        }
+//                    }
+//
+//                }else{
+//                    accX = 0;
+//                    moving_x = false;
+//                }
+//                float velocityX = velocityInitX + accX*dT;
+//                float dX = velocityX*dT;
+//                float positionX =positionInitX + dX + (1/2 * accX * (float)Math.pow(dT,2));
+//                float positionX_pixels = positionX * displayMetrics.xdpi;
+//
+//
+//
+//                float x = positionX_pixels + xCenter;
+//                float y = positionY_pixels + yCenter;
+//                if(x < width && x>=0)
+//                {
+//                    ep.xBall += positionX_pixels;
+//                    velocityInitX = velocityX - velocityInitX;
+//                    accXinit = accX;
+//                    prevAngleX = dRoll;
+//                }
+//
+//                if(y <height && y>=0)
+//                {
+//                    ep.yBall += positionY_pixels;
+//                    velocityInitY = velocityY - velocityInitY;
+//                    accYInit = accY;
+//                    prevAngleY = dPitch;
+//
+//                }
             }
-            else if (orderOfControl.equals("Friction"))
+            else if (orderOfControl.equals("Physics2"))
             {
                 float dPitch = Math.round(-pitch);
                 float dRoll = Math.round(-roll);
@@ -1187,6 +1363,7 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
                 getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
                 int height = displayMetrics.heightPixels;
                 int width = displayMetrics.widthPixels;
+
 
 
 
@@ -1241,6 +1418,7 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
 
 
 
+
                 float velocityY;
                 velocityY = velocityInitY + accY*dT;
                 float dY = velocityY*dT;
@@ -1253,10 +1431,10 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
                 float accX_NoFriction = ((float)386.09) * ((float)Math.sin(dRoll*DEGREES_TO_RADIANS));
 
                 float accX;
-//                if(abs(accX_NoFriction) >= abs(staticFrictionX) && !(moving_x)){
-//                    moving_x = true;
-//                    frictionForceX = 0;
-//                }else
+                if(abs(accX_NoFriction) >= abs(staticFrictionX) && !(moving_x)){
+                    moving_x = true;
+                    frictionForceX = 0;
+                }else
                 if(moving_y){
                     moving_x = true;
                     frictionForceX =((float)0.5)*frictionForceX;
