@@ -32,6 +32,8 @@ public class FittsTiltSetup extends Activity
     final static String WOOD_METAL_7 = "0.7";
     final static String WOOD_METAL_8 = "0.8";
     final static String WOOD_METAL_9 = "0.9";
+    final static String WOOD_METAL_10 = "1.0";
+
 
 
     // GAIN
@@ -67,9 +69,9 @@ public class FittsTiltSetup extends Activity
             "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30" };
     String[] amplitudesArray = {"125, 250, 500", "125, 250, 500", "250, 500", "500"};
     String[] widthsArray = {"40, 60, 100", "40, 60, 100", "60, 100", "100"};
-    String[] ballScaleArray = {"0.5", "0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9",};
+    String[] ballScaleArray = {"0.5", "0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9","1.0"};
     String[] orderOfControlArray = {VELOCITY, VELOCITY, POSITION, PHYSICS1, PHYSICS2, FRICTION};
-    String[] frictionCoefficientArray = {WOOD_METAL_1, WOOD_METAL_2,WOOD_METAL_3,WOOD_METAL_4,WOOD_METAL_5,WOOD_METAL_6,WOOD_METAL_7,WOOD_METAL_8,WOOD_METAL_9};
+    String[] frictionCoefficientArray = {WOOD_METAL_1, WOOD_METAL_2,WOOD_METAL_3,WOOD_METAL_4,WOOD_METAL_5,WOOD_METAL_6,WOOD_METAL_7,WOOD_METAL_8,WOOD_METAL_9, WOOD_METAL_10};
     String[] gainArray = {MEDIUM, VERY_LOW, LOW, MEDIUM, HIGH, VERY_HIGH};
     String gainString;
     String[] selectionModeArray = {FIRST_ENTRY, FIRST_ENTRY, DWELL_500, DWELL_400, DWELL_300};
