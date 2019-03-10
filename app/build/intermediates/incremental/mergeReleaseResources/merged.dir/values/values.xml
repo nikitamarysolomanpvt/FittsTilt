@@ -5,6 +5,7 @@
     <string name="button02text">Save</string>
     <string name="button03text">Exit</string>
     <string name="paramauditoryfeedbacktext">Auditory feedback</string>
+    <string name="paramfrictioncoefficient">Friction Coefficient</string>
     <string name="paramlabelamplitudetext">Target amplitude (A)</string>
     <string name="paramlabelballscale">Ball scale</string>
     <string name="paramlabelblocktext">Block code</string>

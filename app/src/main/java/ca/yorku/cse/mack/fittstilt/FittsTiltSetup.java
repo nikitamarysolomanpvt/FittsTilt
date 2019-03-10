@@ -23,6 +23,7 @@ public class FittsTiltSetup extends Activity
     final static String FRICTION = "Friction";
 
     //Friction Coefficient
+    final static String WOOD_METAL_0 = "0.0";
     final static String WOOD_METAL_1 = "0.1";
     final static String WOOD_METAL_2 = "0.2";
     final static String WOOD_METAL_3 = "0.3";
@@ -34,7 +35,16 @@ public class FittsTiltSetup extends Activity
     final static String WOOD_METAL_9 = "0.9";
     final static String WOOD_METAL_10 = "1.0";
 
-
+    final static String Flicker_1 = "1";
+    final static String Flicker_2 = "2";
+    final static String Flicker_3 = "3";
+    final static String Flicker_4 = "4";
+    final static String Flicker_5 = "5";
+    final static String Flicker_6 = "6";
+    final static String Flicker_7 = "7";
+    final static String Flicker_8 = "8";
+    final static String Flicker_9 = "9";
+    final static String Flicker_10 = "10";
 
     // GAIN
     final static String VERY_LOW = "Very low";
@@ -71,7 +81,8 @@ public class FittsTiltSetup extends Activity
     String[] widthsArray = {"40, 60, 100", "40, 60, 100", "60, 100", "100"};
     String[] ballScaleArray = {"0.5", "0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9","1.0"};
     String[] orderOfControlArray = {VELOCITY, VELOCITY, POSITION, PHYSICS1, PHYSICS2, FRICTION};
-    String[] frictionCoefficientArray = {WOOD_METAL_1, WOOD_METAL_2,WOOD_METAL_3,WOOD_METAL_4,WOOD_METAL_5,WOOD_METAL_6,WOOD_METAL_7,WOOD_METAL_8,WOOD_METAL_9, WOOD_METAL_10};
+    String[] frictionCoefficientArray = {WOOD_METAL_5, WOOD_METAL_0,WOOD_METAL_1, WOOD_METAL_2,WOOD_METAL_3,WOOD_METAL_4,WOOD_METAL_5,WOOD_METAL_6,WOOD_METAL_7,WOOD_METAL_8,WOOD_METAL_9, WOOD_METAL_10};
+    String[] flickerMultiplier = {"1", Flicker_1, Flicker_2, Flicker_3, Flicker_4, Flicker_5, Flicker_6, Flicker_7, Flicker_8, Flicker_9, Flicker_10 };
     String[] gainArray = {MEDIUM, VERY_LOW, LOW, MEDIUM, HIGH, VERY_HIGH};
     String gainString;
     String[] selectionModeArray = {FIRST_ENTRY, FIRST_ENTRY, DWELL_500, DWELL_400, DWELL_300};
@@ -84,7 +95,7 @@ public class FittsTiltSetup extends Activity
     private Spinner spinParticipant, spinSession, spinGroup, spinCondition;
     private Spinner spinNumTargets, spinAmplitude, spinWidth, spinBallScale;
     private Spinner spinOrderOfControl;
-    private Spinner spinFrictionCoefficient;
+    private Spinner spinFrictionCoefficient, spinFlickMult;
     private Spinner spinTG;
     private Spinner spinSelectionMode;
     private CheckBox checkVibrotactileFeedback;
@@ -112,6 +123,7 @@ public class FittsTiltSetup extends Activity
         amplitudesArray[0] = sp.getString("amplitudes", amplitudesArray[0]);
         orderOfControlArray[0] = sp.getString("orderOfControl", orderOfControlArray[0]);
         frictionCoefficientArray[0] = sp.getString("frictionCoefficient", frictionCoefficientArray[0]);
+        flickerMultiplier[0] = sp.getString("flickMultiplier", flickerMultiplier[0]);
         widthsArray[0] = sp.getString("widths", widthsArray[0]);
         ballScaleArray[0] = sp.getString("ballScale", ballScaleArray[0]);
         gainArray[0] = sp.getString("gain", gainArray[0]);
@@ -124,6 +136,7 @@ public class FittsTiltSetup extends Activity
         spinSession = (Spinner)findViewById(R.id.paramSess);
         Spinner spinBlock = (Spinner)findViewById(R.id.paramBlock);
         spinFrictionCoefficient = (Spinner) findViewById(R.id.paramFrictionCoefficient);
+        spinFlickMult = (Spinner) findViewById(R.id.paramFlicketMultiplier);
         spinGroup = (Spinner)findViewById(R.id.paramGroup);
         spinCondition = (Spinner)findViewById(R.id.paramCondition);
         spinNumTargets = (Spinner)findViewById(R.id.paramTargets);
@@ -181,6 +194,10 @@ public class FittsTiltSetup extends Activity
                 = new ArrayAdapter<CharSequence>(this, R.layout.spinnerstyle, frictionCoefficientArray);
         spinFrictionCoefficient.setAdapter(adapterFriction);
 
+        ArrayAdapter<CharSequence> adapterFlicker
+                = new ArrayAdapter<CharSequence>(this, R.layout.spinnerstyle, flickerMultiplier);
+        spinFlickMult.setAdapter(adapterFlicker);
+
         ArrayAdapter<CharSequence> adapterTVG
                 = new ArrayAdapter<CharSequence>(this, R.layout.spinnerstyle, gainArray);
         spinTG.setAdapter(adapterTVG);
@@ -207,6 +224,7 @@ public class FittsTiltSetup extends Activity
         String width = widthsArray[spinWidth.getSelectedItemPosition()];
         String bScaleString = ballScaleArray[spinBallScale.getSelectedItemPosition()];
         String frictionCoefficient = frictionCoefficientArray[spinFrictionCoefficient.getSelectedItemPosition()];
+        String flickMutliplier = flickerMultiplier[spinFlickMult.getSelectedItemPosition()];
         String orderOfControl = orderOfControlArray[spinOrderOfControl.getSelectedItemPosition()];
         String gainString = gainArray[spinTG.getSelectedItemPosition()];
 
@@ -231,6 +249,7 @@ public class FittsTiltSetup extends Activity
         b.putFloat("ballScale", bScale);
         b.putString("orderOfControl", orderOfControl);
         b.putString("frictionCoefficient", frictionCoefficient);
+        b.putString("flickMultiplier", flickMutliplier);
         b.putInt("gain", gain);
         b.putString("selectionMode", selectionMode);
         b.putBoolean("vibrotactileFeedback", vibrotactileFeedback);

@@ -2,6 +2,7 @@ package ca.yorku.cse.mack.fittstilt;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -19,14 +20,19 @@ import android.os.Vibrator;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
+import android.view.MotionEvent;
 import android.view.Surface;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -202,7 +208,7 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
     final float LOG_TWO = 0.693147181f;
     final int VIBRATION_PULSE_DURATION = 5;
     final int REFRESH_INTERVAL = 20; // milliseconds (i.e., updates @ 50 Hz)
-    public float xPosition, xAcceleration,xVelocity = 0.0f;
+    public float velocityXinit, velocityYInit = 0.0f;
 
 
     // setup parameters
@@ -212,8 +218,10 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
     float[] amplitude, width;
     float ballScale; // scaling factor for ball (relative to smallest width)
     String orderOfControl;
-    String frictionCoefficient;
+    float frictionCoefficient;
+    int flicker_multiplier;
     float gain;
+    long startTimeTouch = -1l;
     String selectionMode;
     boolean vibrotactileFeedback, auditoryFeedback;
     float initPosX, initPosY = 0;
@@ -221,10 +229,10 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
     int blockNumber;
     String sd2Leader;
     int screenOrientation;
-
+    boolean canFlick, startMoving;
     float[] accValues = new float[3];
     float[] magValues = new float[3];
-    float x, y, z, pitch, roll;
+    float x,y,z, pitch, roll;
     int numberOfCircles, selectionCount;
     float xCenter, yCenter, xBallCenter, yBallCenter;
     AmplitudeWidth[] aw; // task conditions (A-W pairs)
@@ -251,18 +259,18 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
     File f1, f2, f3,f4;
     StringBuilder sb1, sb2, sb3, results;
     long dwellTime;
+    int stopX, stopY, startX, startY;
     boolean dwellPending;
     CountDownTimer dwellTimer;
     public float xmax,ymax;
     float velocity; // in pixels/second (velocity = tiltMagnitude * tiltVelocityGain
     float dBall; // the amount to move the ball (in pixels): dBall = dT * velocity
     float velocityInitX, velocityInitY = 0;
-    float accXinit, accYInit =0;
-    float velocityX, velocityY = 0;
-    float positionX, positionY = 0;
+    float accXinit, accYinit = 0;
+    float totalXtravel, totalYtravel, totalTime=0;
+
     float positionInitX, positionInitY = 0;
-    float prevAngleX, prevAngleY = 0f;
-    boolean moving_y, moving_x ,stop_y, stop_x = false;
+    boolean moving_y, moving_x= false;
 
     int ballDiameter;
     float oldT = 0;
@@ -304,12 +312,22 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
         width = getValues(b.getString("widths"));
         ballScale = b.getFloat("ballScale");
         orderOfControl = b.getString("orderOfControl");
-        frictionCoefficient = b.getString("frictionCoefficient");
+        frictionCoefficient = Float.parseFloat(b.getString("frictionCoefficient"));
+        flicker_multiplier = Integer.parseInt(b.getString("flickMultiplier"));
         gain = b.getInt("gain");
         selectionMode = b.getString("selectionMode");
         vibrotactileFeedback = b.getBoolean("vibrotactileFeedback");
         auditoryFeedback = b.getBoolean("auditoryFeedback");
         screenOrientation = b.getInt("screenOrientation");
+        //Reads the touch events if its Physics2
+        if(orderOfControl.equals("Physics2")){
+            ep.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                     return onTouchFlick(motionEvent);
+                }
+            });
+        }
 
         // ball scaling will be done in the ExperimentPanel
         //ep.ballScale = ballScale;
@@ -403,7 +421,7 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
             sd1 = new BufferedWriter(new FileWriter(f1));
             sd2 = new BufferedWriter(new FileWriter(f2));
             sd3 = new BufferedWriter(new FileWriter(f3));
-            sd4 = new BufferedWriter(new FileWriter(f4));
+            //sd4 = new BufferedWriter(new FileWriter(f4));
 
             // output header in sd1 file
             sd1.write(SD1_HEADER, 0, SD1_HEADER.length());
@@ -417,8 +435,6 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
             sd3.write(SD3_HEADER, 0, SD3_HEADER.length());
             sd3.flush();
 
-            sd4.write("Time, X,Angle(Roll), Acceleration X, Velocity X, Position X * Mult,Y, Angle(Pitch), Acceleration Y, Velocity Y, Position Y * Mult");
-            sd4.flush();
 
         } catch (IOException e)
         {
@@ -480,6 +496,74 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
 
     } // end onCreate
 
+    /*
+    * Event Listener for Touch Events
+    * */
+    public boolean onTouchFlick(MotionEvent motionEvent){
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int X = (int) motionEvent.getX();
+        int Y = (int) motionEvent.getY();
+        int eventAction = motionEvent.getAction();
+        if(!canFlick) {
+            //Checks if the screen has been touched saves the info at that time.
+            if (eventAction == MotionEvent.ACTION_DOWN) {
+
+                if ((X >= (ep.xBall - 50) && X <= (ep.xBall + 50)) && (Y >= (ep.yBall - 50) && Y <= (ep.yBall + 50))) {
+                    startTimeTouch = System.currentTimeMillis();
+                    canFlick = true;
+                    startX = X;
+                    startY = Y;
+
+                }
+            }
+        }
+        //When the touch is released checks initializes the velocity and acc variables
+            if (eventAction == MotionEvent.ACTION_UP) {
+                stopX = X;
+                stopY = Y;
+                if (canFlick) {
+                    float deltaX = stopX - startX;
+                    float deltaY = stopY - startY;
+                    double difference;
+                    if ((deltaX >= -50 && deltaX <= 50)) {
+                        deltaX = 0;
+                    }
+                    if ((deltaY >= -50 && deltaY <= 50)) {
+                        deltaY = 0;
+                    }
+                    deltaX = deltaX / displayMetrics.xdpi;
+                    deltaY = deltaY / displayMetrics.ydpi;
+                    long stopTime = System.currentTimeMillis();
+                    difference = (stopTime - startTimeTouch) * 0.001;
+
+                    velocityXinit = flicker_multiplier * (deltaX / (float) difference);
+                    velocityYInit = flicker_multiplier * (deltaY / (float) difference);
+                    accXinit = frictionCoefficient * ((float) 286);
+                    accYinit = frictionCoefficient * ((float) 286);
+                    if (accXinit != 0 && accYinit != 0) {
+                        totalXtravel = abs((velocityXinit) / (-1 * (accXinit)));
+                        totalYtravel = abs((velocityYInit) / (-1 * (accXinit)));
+                    } else {
+                        totalXtravel = 1;
+                        totalYtravel = 1;
+
+                    }
+
+
+                    Log.d("velocity", "X: " + velocityXinit + " Y:" + velocityYInit + " difference: " + difference + " acc: " + accXinit);
+                    startMoving = true;
+                    startX = stopX;
+                    startY = stopY;
+                }
+            }
+
+
+
+        return true;
+    }
+
     @Override
     public void onWindowFocusChanged(boolean hasFocus)
     {
@@ -488,11 +572,16 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
 
         panelWidth = ep.getWidth();
         panelHeight = ep.getHeight();
-
         xCenter = panelWidth / 2f;
         yCenter = panelHeight / 2f;
         ep.xBall = xCenter; // start the ball in the center of the display
+        if(orderOfControl.equals("Physics2"))
+        {
+        ep.yBall = panelHeight - 50;
+        }
+        else{
         ep.yBall = yCenter;
+        }
 
         // scale target amplitudes and widths as appropriate for screen size
         // NOTE:  smaller of panelWidth or panelHeight constrains allowable span for target conditions
@@ -992,6 +1081,7 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
     // screen updates are initiated in onFinish which executes every REFRESH_INTERVAL milliseconds
     private class ScreenRefreshTimer extends CountDownTimer
     {
+
         ScreenRefreshTimer(long millisInFuture, long countDownInterval)
         {
             super(millisInFuture, countDownInterval);
@@ -1067,8 +1157,6 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
                 Display display = getWindowManager().getDefaultDisplay();
                 Point size = new Point();
                 display.getSize(size);
-                double x1 = Math.sqrt(Math.pow(width/displayMetrics.xdpi,2));
-                double y1 = Math.sqrt(Math.pow(height/displayMetrics.ydpi,2));
 
                 //Getting the position of X
                 float accX = ((float)5/7)*((float)386.09) * ((float)Math.sin(dRoll*DEGREES_TO_RADIANS));
@@ -1080,7 +1168,6 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
                 positionX =positionInitX + dX*multiplier + (1/2 * accX * (float)Math.pow(dT,2));
                 //positionX =positionInitX + dX*multiplier;
                 float positionX_pixels = positionX * displayMetrics.xdpi;
-                Log.d("pixels", "Velocity X:"+ velocityX+" X:"+positionX+" displayMetrics:"+positionX_pixels);
                 if(abs(positionX) > (width/2)) positionX = oldPositionX;
 
 
@@ -1095,28 +1182,25 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
                 positionY =positionInitY + dY*multiplier + (1/2 * accY * (float)Math.pow(dT, 2));
                 //positionY =positionInitY + dY*multiplier;
                 float positionY_pixels = positionY * displayMetrics.ydpi;
-                Log.d("pixels", "Velocity Y"+ velocityY+" Y:"+positionY+" displayMetrics:"+positionY_pixels);
                 if(abs(positionY) > (height/2)) positionY = oldPosition;
 
-                try {
-                    //Header Parameters: Time, X, Angle(Roll), Acceleration X, Velocity X, Position X * Mult,Y, Angle(Pitch), Acceleration Y, Velocity Y, Position X * Mult
-                    oldT = dT+oldT;
-                    sd4.write("\n"+oldT+","+x+","+dRoll+","+accX+","+velocityX+","+positionX+","+y+","+dPitch+","+accY+","+velocityY+","+positionY);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                float x =  xCenter + positionX_pixels;
+                float positionX_old = positionInitX + xCenter;
+                if((positionX_old < width && positionX_old>=0) && !(x < width && x>=0)){
+                  if(x<=0){x=0;} else {x=width-1;}
                 }
 
-
                 if(x < width && x>=0) {
-                    ep.xBall = xCenter + positionX_pixels;
+                    ep.xBall = x;
                     positionInitX = positionX;
                     velocityInitX = velocityX - velocityInitX;
 
                 }
 
+                float y = yCenter + positionY_pixels;
                 if(y <height && y>=0)
                 {
-                    ep.yBall =  yCenter + positionY_pixels;
+                    ep.yBall =  y;
                     positionInitY = positionY;
                     velocityInitY =  velocityY - velocityInitY;
 
@@ -1127,10 +1211,6 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
                 initPosY = positionY;
 
                 Log.e("Info Delta", "Position X:"+ positionX+" Position Y:"+ positionY);
-
-
-
-
             } else if (orderOfControl.equals("Friction"))
             {
 
@@ -1140,8 +1220,8 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
 
                 //Check if it was moving from prev round and based on that checks friction
                 if(moving_x || moving_y){
-                    frictionX = Float.parseFloat(frictionCoefficient)*(float)Math.cos(dRoll*DEGREES_TO_RADIANS);
-                    frictionY = Float.parseFloat(frictionCoefficient)*(float)Math.cos(dPitch*DEGREES_TO_RADIANS);
+                    frictionX = (frictionCoefficient)*(float)Math.cos(dRoll*DEGREES_TO_RADIANS);
+                    frictionY = (frictionCoefficient)*(float)Math.cos(dPitch*DEGREES_TO_RADIANS);
                 }
                 else{
                     frictionX = ((float)abs(Math.tan(dRoll*DEGREES_TO_RADIANS)));
@@ -1157,8 +1237,6 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
                 Display display = getWindowManager().getDefaultDisplay();
                 Point size = new Point();
                 display.getSize(size);
-                double x1 = Math.sqrt(Math.pow(width/displayMetrics.xdpi,2));
-                double y1 = Math.sqrt(Math.pow(height/displayMetrics.ydpi,2));
 
 
                 //Getting the position of X
@@ -1167,11 +1245,8 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
                 float positionX = 0f;
                 velocityX = (velocityInitX + accX*dT) - ((frictionX)*(velocityInitX + accX*dT));
                 float dX = velocityX*dT;
-                float oldPositionX = positionX;
                 positionX =positionInitX + dX*multiplier + (1/2 * accX * (float)Math.pow(dT,2));
-                //positionX =positionInitX + dX*multiplier;
                 float positionX_pixels = positionX * displayMetrics.xdpi;
-                Log.d("pixels", "Velocity X:"+ velocityX+" X:"+positionX+" displayMetrics:"+positionX_pixels);
 
                 //Getting the position of Y
                 float accY = ((float)5/7)*((float)386.09) * ((float)Math.sin(dPitch*DEGREES_TO_RADIANS));
@@ -1181,18 +1256,10 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
                 float dY = velocityY*dT;
                 float oldPosition = positionY;
                 positionY =positionInitY + dY*multiplier + (1/2 * accY * (float)Math.pow(dT, 2));
-                //positionY =positionInitY + dY*multiplier;
                 float positionY_pixels = positionY * displayMetrics.ydpi;
-                Log.d("pixels", "Velocity Y"+ velocityY+" Y:"+positionY+" displayMetrics:"+positionY_pixels);
                 if(abs(positionY) > (height/2)) positionY = oldPosition;
 
-                try {
-                    //Header Parameters: Time, X, Angle(Roll), Acceleration X, Velocity X, Position X * Mult,Y, Angle(Pitch), Acceleration Y, Velocity Y, Position X * Mult
-                    oldT = dT+oldT;
-                    sd4.write("\n"+oldT+","+x+","+dRoll+","+accX+","+velocityX+","+positionX+","+y+","+dPitch+","+accY+","+velocityY+","+positionY);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                //Updates the position of the ball
                 if((xCenter + positionX_pixels) < width && (xCenter + positionX_pixels) >=0) {
                     ep.xBall = xCenter + positionX_pixels;
                     positionInitX = positionX;
@@ -1223,161 +1290,53 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
             }
             else if (orderOfControl.equals("Physics2"))
             {
-                float dPitch = Math.round(-pitch);
-                float dRoll = Math.round(-roll);
-
-                float frictionForceY = ((float)386.09) * Float.parseFloat(frictionCoefficient) * ((float) Math.cos(dPitch*DEGREES_TO_RADIANS));
-                float staticFrictionYCoefficient = ((float)Math.tan(dPitch*DEGREES_TO_RADIANS));
-                float staticFrictionY = ((float)386.09) * staticFrictionYCoefficient * ((float) Math.cos(dPitch*DEGREES_TO_RADIANS));
-                float frictionForceX =((float)386.09) * (Float.parseFloat(frictionCoefficient)) * ((float) Math.cos(dRoll*DEGREES_TO_RADIANS));
-                float friction = (float)Math.sqrt(Math.pow(frictionForceX,2)+Math.pow((double)frictionForceY,2));
-
-
+                //The Flick Order of Control for Testing
                 DisplayMetrics displayMetrics = new DisplayMetrics();
                 getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
                 int height = displayMetrics.heightPixels;
                 int width = displayMetrics.widthPixels;
 
+                if(startMoving) {
+                    accXinit = ((velocityXinit<0)? accXinit*(-1) : accXinit);
+                    accYinit = ((velocityYInit<0)? accYinit*(-1) : accYinit);
+                    float positionX = velocityXinit*dT - ((accXinit/2)*(float)Math.pow(((double) dT),2));
+                    positionX = (positionX) * displayMetrics.xdpi;
+                    float positionY = velocityYInit*dT - ((accYinit/2)*(float)Math.pow(((double) dT),2));
+                    positionY = (positionY) * displayMetrics.ydpi;
+                    float x = ep.xBall + positionX;
+                    float y = ep.yBall + positionY ;
 
-
-
-                float accY_NoFriction = ((float)386.09) * ((float)Math.sin(prevAngleY*DEGREES_TO_RADIANS));
-                float accY;
-                if(abs(accY_NoFriction) > abs(staticFrictionY) && !(moving_y)){
-                    moving_y = true;
-
-                }
-                else if(moving_x){
-                    moving_y = true;
-                    //frictionForceY = 0;
-                }
-
-
-                if(moving_y && !(stop_y)){
-                        if(accY_NoFriction > 0){
-                            if(accY_NoFriction - frictionForceY > 0){
-                            accY = accY_NoFriction - frictionForceY;
-                            moving_y = true;
-                            }
-                            else{
-                                stop_y = true;
-                                accY = accYInit;
-                            }
-                        }
-                        else{
-                            if(accY_NoFriction + frictionForceY < 0){
-                            accY = accY_NoFriction + frictionForceY;
-                            moving_y = true;
-                            }
-                            else{
-                                stop_y = true;
-                                accY = accYInit;
-                            }
-                        }
-
-                }
-                else if(stop_y){
-                    accY=0;
-                    stop_y=false;
-                    moving_y = false;
-
-                }
-                else{
-                    accY = accYInit;
-
-                }
-
-
-
-
-
-
-
-                float velocityY;
-                velocityY = velocityInitY + accY*dT;
-                float dY = velocityY*dT;
-                float positionY =positionInitY + dY + (1/2 * accY * (float)Math.pow(dT, 2));
-                float positionY_pixels = positionY * displayMetrics.ydpi;
-
-
-                float staticFrictionXCoefficient = ((float)Math.tan(prevAngleX*DEGREES_TO_RADIANS));
-                float staticFrictionX = ((float)386.09) * staticFrictionXCoefficient * ((float) Math.cos(dRoll*DEGREES_TO_RADIANS));
-                float accX_NoFriction = ((float)386.09) * ((float)Math.sin(dRoll*DEGREES_TO_RADIANS));
-
-                float accX;
-                if(abs(accX_NoFriction) >= abs(staticFrictionX) && !(moving_x)){
-                    moving_x = true;
-                    frictionForceX = 0;
-                }else
-                if(moving_y){
-                    moving_x = true;
-                    frictionForceX =((float)0.5)*frictionForceX;
-                }
-
-
-                if(moving_x){
-                    if(accX_NoFriction > 0){
-                        if(accX_NoFriction - frictionForceX > 0){
-                            accX = accX_NoFriction - (frictionForceX);
-                            moving_x = true;
-                        }
-                        else{
-                            accX = accXinit;
-                            moving_x = false;
-                        }
+                    if(x<width && x>0)
+                    {
+                        ep.xBall += positionX;
+                        positionInitX = positionX - positionInitX;
+                        totalTime += dT;
                     }
                     else{
-                        if(accX_NoFriction + frictionForceX < 0){ 
-                            accX = accX_NoFriction + (frictionForceX);
-                            moving_x = true;
-                        }
-                        else{
-                            accX = accXinit;
-                            moving_x = false;
-                        }
+                        velocityXinit = velocityXinit*(-1);
                     }
 
-                }else{
-                    accX = 0;
-                }
 
+                    if(y<height && y>0)
+                    {
+                        ep.yBall += positionY;
+                        positionInitY = positionY - positionInitY;
+                        totalTime += dT;
+                    }
+                    else{
+                        velocityYInit = velocityYInit*(-1);
+                    }
 
+                    if(totalTime>=((totalXtravel+totalYtravel)*20)){
+                        startMoving = false;
+                        canFlick = false;
+                        totalTime = 0;
 
-
-
-                float velocityX = velocityInitX + accX*dT;
-                float dX = velocityX*dT;
-                float positionX =positionInitX + dX + (1/2 * accX * (float)Math.pow(dT,2));
-                float positionX_pixels = positionX * displayMetrics.xdpi;
-
-
-
-                float x = positionX_pixels + xCenter;
-                float y = positionY_pixels + yCenter;
-//                Log.d("Data Friction:", "accY:"+accY+" positionY: "+positionY_pixels +" staticFrictionY: "+((float)Math.tan(dRoll*DEGREES_TO_RADIANS))+
-//                        " frictionCoefficient: "+frictionCoefficient+" staticFrictionX:"+((float)Math.tan(dPitch*DEGREES_TO_RADIANS))+
-//                        " frictionCoefficient:"+frictionCoefficient+" accX:"+accX+" positionX:"+positionX_pixels);
-
-                Log.d("Data Coefficient:", "frictionCoefficient: "+frictionCoefficient+ " accX:"+accY+ " moving_x:"+moving_x + " stop_x:"+stop_x+" accX_NoFriction:"+accX_NoFriction+" frictionForceX:"+frictionForceX);
-                if(x < width && x>=0)
-                {
-                    ep.xBall += positionX_pixels;
-                    velocityInitX = velocityX - velocityInitX;
-                    accXinit = accX;
-                    prevAngleX = dRoll;
-                }
-
-                if(y <height && y>=0)
-                {
-                    ep.yBall += positionY_pixels;
-                    velocityInitY = velocityY - velocityInitY;
-                    accYInit = accY;
-                    prevAngleY = dPitch;
+                    }
 
                 }
-
-
             }
+
 
             // keep the ball visible
 

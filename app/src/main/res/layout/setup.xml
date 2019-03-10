@@ -255,6 +255,29 @@
                 android:layout_height="match_parent" >
 
                 <TextView
+                    android:id="@+id/paramLabelFlickerMuliplier"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:paddingTop="10dp"
+                    android:paddingRight="5dp"
+                    android:text="@string/paramflickvalue"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <Spinner
+                    android:id="@+id/paramFlicketMultiplier"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <TextView
                     android:id="@+id/paramLabelFrictionCoefficient"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

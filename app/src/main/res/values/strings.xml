@@ -22,5 +22,6 @@
     <string name="paramlabelselectionmodetext">Selection mode</string>
     <string name="paramvibrotactilefeedbacktext">Vibrotactile feedback</string>
     <string name="paramauditoryfeedbacktext">Auditory feedback</string>
+    <string name="paramflickvalue">Flicker Multiplier</string>
 
 </resources>

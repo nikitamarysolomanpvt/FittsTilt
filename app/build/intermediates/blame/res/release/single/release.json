@@ -1,0 +1,38 @@
+[
+    {
+        "merged": "C:\\Users\\emerc\\Desktop\\Work\\Projects\\FittsTilt\\app\\build\\intermediates\\res\\merged\\release\\layout_setup.xml.flat",
+        "source": "C:\\Users\\emerc\\Desktop\\Work\\Projects\\FittsTilt\\app\\src\\main\\res\\layout\\setup.xml"
+    },
+    {
+        "merged": "C:\\Users\\emerc\\Desktop\\Work\\Projects\\FittsTilt\\app\\build\\intermediates\\res\\merged\\release\\drawable-hdpi_icon.png.flat",
+        "source": "C:\\Users\\emerc\\Desktop\\Work\\Projects\\FittsTilt\\app\\src\\main\\res\\drawable-hdpi\\icon.png"
+    },
+    {
+        "merged": "C:\\Users\\emerc\\Desktop\\Work\\Projects\\FittsTilt\\app\\build\\intermediates\\res\\merged\\release\\raw_click.wav.flat",
+        "source": "C:\\Users\\emerc\\Desktop\\Work\\Projects\\FittsTilt\\app\\src\\main\\res\\raw\\click.wav"
+    },
+    {
+        "merged": "C:\\Users\\emerc\\Desktop\\Work\\Projects\\FittsTilt\\app\\build\\intermediates\\res\\merged\\release\\layout_results_dialog.xml.flat",
+        "source": "C:\\Users\\emerc\\Desktop\\Work\\Projects\\FittsTilt\\app\\src\\main\\res\\layout\\results_dialog.xml"
+    },
+    {
+        "merged": "C:\\Users\\emerc\\Desktop\\Work\\Projects\\FittsTilt\\app\\build\\intermediates\\res\\merged\\release\\drawable-ldpi_icon.png.flat",
+        "source": "C:\\Users\\emerc\\Desktop\\Work\\Projects\\FittsTilt\\app\\src\\main\\res\\drawable-ldpi\\icon.png"
+    },
+    {
+        "merged": "C:\\Users\\emerc\\Desktop\\Work\\Projects\\FittsTilt\\app\\build\\intermediates\\res\\merged\\release\\drawable-hdpi_ball.png.flat",
+        "source": "C:\\Users\\emerc\\Desktop\\Work\\Projects\\FittsTilt\\app\\src\\main\\res\\drawable-hdpi\\ball.png"
+    },
+    {
+        "merged": "C:\\Users\\emerc\\Desktop\\Work\\Projects\\FittsTilt\\app\\build\\intermediates\\res\\merged\\release\\layout_spinnerstyle.xml.flat",
+        "source": "C:\\Users\\emerc\\Desktop\\Work\\Projects\\FittsTilt\\app\\src\\main\\res\\layout\\spinnerstyle.xml"
+    },
+    {
+        "merged": "C:\\Users\\emerc\\Desktop\\Work\\Projects\\FittsTilt\\app\\build\\intermediates\\res\\merged\\release\\layout_main.xml.flat",
+        "source": "C:\\Users\\emerc\\Desktop\\Work\\Projects\\FittsTilt\\app\\src\\main\\res\\layout\\main.xml"
+    },
+    {
+        "merged": "C:\\Users\\emerc\\Desktop\\Work\\Projects\\FittsTilt\\app\\build\\intermediates\\res\\merged\\release\\drawable-mdpi_icon.png.flat",
+        "source": "C:\\Users\\emerc\\Desktop\\Work\\Projects\\FittsTilt\\app\\src\\main\\res\\drawable-mdpi\\icon.png"
+    }
+]

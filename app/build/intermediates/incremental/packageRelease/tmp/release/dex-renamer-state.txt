@@ -1,0 +1,4 @@
+#Mon Feb 04 11:10:01 EST 2019
+base.0=C\:\\Users\\emerc\\Desktop\\Work\\Projects\\FittsTilt\\app\\build\\intermediates\\transforms\\dexMerger\\release\\0
+path.0=classes.dex
+renamed.0=classes.dex
