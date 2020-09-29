@@ -51,7 +51,7 @@ import static java.lang.Math.max;
  * <li>User performance data gathered and saved in output files for follow-up analyses. <p> </ul>
  *
  * <h3>Related References</h3>
- *
+ * <p>
  * The following publications present research where this software was used. <p>
  *
  * <ul> <li> <a href="http://www.yorku.ca/mack/nordichi2012.html">"FittsTilt: The Application of Fitts' Law to
@@ -59,7 +59,7 @@ import static java.lang.Math.max;
  *
  * <li> <a href="http://www.yorku.ca/mack/gi2014.html">"Position vs. Velocity Control for Tilt-based Interaction"</a>,
  * by Teather and MacKenzie (<i>Graphics Interface 2014</i>). </ul> <p>
- *
+ * <p>
  * The following publications provide background information on Fitts' law and experimental testing using the Fitts'
  * paradigm. <p>
  *
@@ -70,10 +70,10 @@ import static java.lang.Math.max;
  * Interaction"</a>, by MacKenzie (<i>HCI 1992</i>). <p> </ul> <p>
  *
  * <h3>Setup Parameters</h3>
- *
+ * <p>
  * Upon launching, the program presents a setup dialog: <p> <center><a href="FittsTilt-1.jpg"><img src="FittsTilt-1.jpg"
  * width="200"></a></center> <p> </center>
- *
+ * <p>
  * In all, there are 14 setup parameters organized as 12 spinners and two checkboxes. The setup parameters are as
  * follows: <p>
  *
@@ -104,7 +104,7 @@ import static java.lang.Math.max;
  *
  * <tr> <td valign="top">Target width (W) <td>Specifies the width of targets. This is the diameter of the target
  * circles. The spinner offers three choices: "40, 60, 100", "60, 100", or "100". <p>
- *
+ * <p>
  * Notes:<br> 1. The total number of <i>A-W</i> conditions (sequences) in a block is <i>n &times; m</i>, where <i>n</i>
  * is the number of target amplitudes and <i>m</i> is the number of target widths.<br> 2. The <i>A-W</i> values are
  * scaled such that the widest condition (largest A, largest W) spans the device's display with minus 10 pixels on each
@@ -134,7 +134,7 @@ import static java.lang.Math.max;
  * selection. <p> </table> </blockquote>
  *
  * <h3>Operation</h3>
- *
+ * <p>
  * Once the setup parameters are chosen, the testing begins by tapping "OK". The first screen to appear is a transition
  * screen.  See below.  The transition screen provides two options.  To select an option the user must manoeuvre the
  * virtual ball to the green or blue circle and dwell on the circle for one second.  If the green circle is selected,
@@ -142,9 +142,9 @@ import static java.lang.Math.max;
  * circle is selected, the application transitions to the first sequence of experiment trials. <p>
  *
  * <center> <a href="FittsTilt-2.jpg"><img src="FittsTilt-2.jpg" width=200 alt="image"></a></center> <p>
- *
- *
- *
+ * <p>
+ * <p>
+ * <p>
  * A series of trials for a single <i>A-W</i> condition is called a "sequence".  The target to select is highlighted in
  * pink (below, left).  After a selection, the highlight moves to a target on the opposite side of the layout circle.
  * The pattern of selecting moves around the layout circle until all targets are selected. At the end of a sequence,
@@ -152,14 +152,14 @@ import static java.lang.Math.max;
  *
  * <center> <a href="FittsTilt-3.jpg"><img src="FittsTilt-3.jpg" width=200 alt="image"></a> <a
  * href="FittsTilt-4.jpg"><img src="FittsTilt-4.jpg" width=200 alt="image"></a> </center> <p>
- *
+ * <p>
  * Once all the <i>A-W</i> conditions in a block are finished, the application terminates. User performance data are
  * saved in files for follow-up analyses. The data files are located in the device's public storage directory in a
  * sub-directory named FittsTiltData. <p>
  *
  *
  * <h3>Output Data Files</h3>
- *
+ * <p>
  * For each block of testing, three output data files are created: sd1, sd2, and sd3. ("sd" is for "summary data".) The
  * sd1 file contains data for each trial of input.  The sd2 file contains data summarizing each sequence of trials.  The
  * sd3 file contains trace data for each trial, including <i>x</i>, <i>y</i>, and <i>tilt angle</i> for each sample.  A
@@ -174,7 +174,7 @@ import static java.lang.Math.max;
  * -TG20-FIRST_ENTRY.sd3</a>
  *
  * </ul> <p>
- *
+ * <p>
  * For most analyses, the data in the sd2 files are sufficient.  The data are comma delimited for easy importing into
  * Excel or a statistics application for follow-up analyses.  An example is shown below for the data in the sd2 file
  * above. <p>
@@ -183,8 +183,7 @@ import static java.lang.Math.max;
  *
  * @author Scott MacKenzie, 2011-2016
  */
-public class FittsTiltActivity extends Activity implements SensorEventListener
-{
+public class FittsTiltActivity extends Activity implements SensorEventListener {
     // int constants to setup a sensor mode (see Demo_TiltMeter API for discussion)
     final static int ORIENTATION = 0;
     final static int ACCELEROMETER_ONLY = 1;
@@ -224,7 +223,7 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
     float frictionCoefficient;
 
     // Amit changes
-    String frictionCoefficientVisualization,frictionCoefficientVisualizationMatching;
+    String frictionCoefficientVisualization, frictionCoefficientVisualizationMatching;
 
     int flicker_multiplier;
     float gain;
@@ -239,7 +238,7 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
     boolean canFlick, startMoving;
     float[] accValues = new float[3];
     float[] magValues = new float[3];
-    float x,y,z, pitch, roll;
+    float x, y, z, pitch, roll;
     int numberOfCircles, selectionCount;
     float xCenter, yCenter, xBallCenter, yBallCenter;
     AmplitudeWidth[] aw; // task conditions (A-W pairs)
@@ -263,21 +262,21 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
     TracePoint[] p; // points for the trace of the ball during a trial
     Trace t;
     BufferedWriter sd1, sd2, sd3, sd4;
-    File f1, f2, f3,f4;
+    File f1, f2, f3, f4;
     StringBuilder sb1, sb2, sb3, results;
     long dwellTime;
     int stopX, stopY, startX, startY;
     boolean dwellPending;
     CountDownTimer dwellTimer;
-    public float xmax,ymax;
+    public float xmax, ymax;
     float velocity; // in pixels/second (velocity = tiltMagnitude * tiltVelocityGain
     float dBall; // the amount to move the ball (in pixels): dBall = dT * velocity
     float velocityInitX, velocityInitY = 0;
     float accXinit, accYinit = 0;
-    float totalXtravel, totalYtravel, totalTime=0;
+    float totalXtravel, totalYtravel, totalTime = 0;
 
     float positionInitX, positionInitY = 0;
-    boolean moving_y, moving_x= false;
+    boolean moving_y, moving_x = false;
 
     int ballDiameter;
     float oldT = 0;
@@ -302,8 +301,7 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
      * Called when the activity is first created.
      */
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
@@ -311,7 +309,7 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
         // init study parameters
         Bundle b = getIntent().getExtras();
         orderOfControl = b.getString("orderOfControl");
-        ep = (ExperimentPanel)findViewById(R.id.experimentpanel);
+        ep = (ExperimentPanel) findViewById(R.id.experimentpanel);
         radius = Integer.parseInt(b.getString("radius"));
         ep.orderOfControl = orderOfControl;
         participantCode = b.getString("participantCode");
@@ -321,10 +319,9 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
         conditionCode = b.getString("conditionCode");
         numberOfTargets = b.getInt("numberOfTargets");
         String amplitudeStr = b.getString("amplitudes");
-        if(amplitudeStr.equals("auto")){
+        if (amplitudeStr.equals("auto")) {
             amplitude = getAutoValues();
-        }
-        else{
+        } else {
             amplitude = getValues(amplitudeStr);
         }
         width = getValues(b.getString("widths"));
@@ -345,11 +342,11 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
         auditoryFeedback = b.getBoolean("auditoryFeedback");
         screenOrientation = b.getInt("screenOrientation");
         //Reads the touch events if its Flicker
-        if(orderOfControl.equals("Flicker")){
+        if (orderOfControl.equals("Flicker")) {
             ep.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {
-                     return onTouchFlick(motionEvent);
+                    return onTouchFlick(motionEvent);
                 }
             });
         }
@@ -357,7 +354,7 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
 
 //        ep.setBackground();
         // Amit changes background image
-        if(frictionCoefficientVisualizationMatching.equalsIgnoreCase("matching")) {
+        if (frictionCoefficientVisualizationMatching.equalsIgnoreCase("matching")) {
             if (frictionCoefficientVisualization.equalsIgnoreCase("low")) {
                 ep.setBackgroundResource(R.drawable.ic_glass);
             } else if (frictionCoefficientVisualization.equalsIgnoreCase("medium")) {
@@ -384,28 +381,24 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
         // =====================
 
         // get sensors
-        sm = (SensorManager)getSystemService(SENSOR_SERVICE);
+        sm = (SensorManager) getSystemService(SENSOR_SERVICE);
         sO = sm.getDefaultSensor(Sensor.TYPE_ORIENTATION); // supported on many devices
         sA = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER); // supported on most devices
         sM = sm.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD); // null on many devices
 
         // setup the sensor mode (see API for discussion)
-        if (sO != null)
-        {
+        if (sO != null) {
             sensorMode = ORIENTATION;
             sA = null;
             sM = null;
             Log.i(MYDEBUG, "Sensor mode: ORIENTATION");
-        } else if (sA != null && sM != null)
-        {
+        } else if (sA != null && sM != null) {
             sensorMode = ACCELEROMETER_AND_MAGNETIC_FIELD;
             Log.i(MYDEBUG, "Sensor mode: ACCELEROMETER_AND_MAGNETIC_FIELD");
-        } else if (sA != null)
-        {
+        } else if (sA != null) {
             sensorMode = ACCELEROMETER_ONLY;
             Log.i(MYDEBUG, "Sensor mode: ACCELEROMETER_ONLY");
-        } else
-        {
+        } else {
             Log.i(MYDEBUG, "Can't run demo.  Requires Orientation sensor or Accelerometer");
             this.finish();
         }
@@ -416,8 +409,7 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
 
         // make a working directory (if necessary) to store data files
         File dataDirectory = new File(Environment.getExternalStorageDirectory() + File.separator + WORKING_DIRECTORY);
-        if (!dataDirectory.exists() && !dataDirectory.mkdirs())
-        {
+        if (!dataDirectory.exists() && !dataDirectory.mkdirs()) {
             Log.e(MYDEBUG, "ERROR --> FAILED TO CREATE DIRECTORY: " + WORKING_DIRECTORY);
             super.onDestroy(); // cleanup
             this.finish(); // terminate
@@ -433,29 +425,27 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
          * filename is found.  The goal, of course, is to ensure data files are not inadvertently overwritten.
          */
         blockNumber = 0;
-        do
-        {
+        do {
             ++blockNumber;
             blockCode = String.format(Locale.CANADA, "B%02d", blockNumber);
             String baseFilename = String.format(Locale.CANADA, "%s-%s-%s-%s-%s-%s-%s-TG%d-%s", APP, participantCode,
                     sessionCode, blockCode, groupCode, conditionCode, orderOfControl.substring(0, 3).toUpperCase
-                            (Locale.CANADA), (int)gain, selectionMode.toUpperCase(Locale.CANADA));
+                            (Locale.CANADA), (int) gain, selectionMode.toUpperCase(Locale.CANADA));
 
             f1 = new File(dataDirectory, baseFilename + ".sd1");
             f2 = new File(dataDirectory, baseFilename + ".sd2");
             f3 = new File(dataDirectory, baseFilename + ".sd3");
-            f4 = new File(dataDirectory, baseFilename+"_EM_test.txt");
+            f4 = new File(dataDirectory, baseFilename + "_EM_test.txt");
 
 
             // also make a comma-delimited leader that will begin each data line written to the sd2 file
             sd2Leader = String.format(Locale.CANADA, "%s,%s,%s,%s,%s,%s,%s,TG%d,%s,", APP, participantCode, sessionCode,
                     blockCode, groupCode, conditionCode, orderOfControl.substring(0, 3)
-                            .toUpperCase(Locale.CANADA), (int)gain, selectionMode.toUpperCase(Locale.CANADA));
+                            .toUpperCase(Locale.CANADA), (int) gain, selectionMode.toUpperCase(Locale.CANADA));
 
         } while (f1.exists() || f2.exists());
 
-        try
-        {
+        try {
             sd1 = new BufferedWriter(new FileWriter(f1));
             sd2 = new BufferedWriter(new FileWriter(f2));
             sd3 = new BufferedWriter(new FileWriter(f3));
@@ -474,8 +464,7 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
             sd3.flush();
 
 
-        } catch (IOException e)
-        {
+        } catch (IOException e) {
             Log.e(MYDEBUG, "ERROR OPENING DATA FILES! e=" + e.toString());
             super.onDestroy();
             this.finish();
@@ -493,20 +482,17 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
         else if (selectionMode.equals(FittsTiltSetup.DWELL_300))
             dwellTime = 300;
 
-        dwellTimer = new CountDownTimer(dwellTime, dwellTime)
-        {
-            public void onTick(long millisUntilFinished)
-            {
+        dwellTimer = new CountDownTimer(dwellTime, dwellTime) {
+            public void onTick(long millisUntilFinished) {
             }
 
-            public void onFinish()
-            {
+            public void onFinish() {
                 dwellPending = false;
                 doTargetSelected();
             }
         };
 
-        vib = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
+        vib = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         clickSound = MediaPlayer.create(this, R.raw.click);
 
         // The following size parameters were chosen by examining the output files. The goal here
@@ -521,7 +507,7 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
         String[] s = new String[4];
         s[0] = "Practice";
         s[1] = "Order of control = " + orderOfControl;
-        s[2] = "Tilt gain = " + (int)tiltGain;
+        s[2] = "Tilt gain = " + (int) tiltGain;
         s[3] = "Selection mode = " + selectionMode;
 
         ep.practice = s;
@@ -539,23 +525,23 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         float maxAmplitude = displayMetrics.heightPixels * .8f;
         float[] output = new float[3];
-        output[0] = maxAmplitude * 1/3;
-        output[1] = maxAmplitude * 2/3;
+        output[0] = maxAmplitude * 1 / 3;
+        output[1] = maxAmplitude * 2 / 3;
         output[2] = maxAmplitude;
         return output;
     }
 
     /*
-    * Event Listener for Touch Events
-    * */
-    public boolean onTouchFlick(MotionEvent motionEvent){
+     * Event Listener for Touch Events
+     * */
+    public boolean onTouchFlick(MotionEvent motionEvent) {
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int X = (int) motionEvent.getX();
         int Y = (int) motionEvent.getY();
         int eventAction = motionEvent.getAction();
-        if(!canFlick) {
+        if (!canFlick) {
             //Checks if the screen has been touched saves the info at that time.
             if (eventAction == MotionEvent.ACTION_DOWN) {
 
@@ -568,56 +554,54 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
             }
         }
         //When the touch is released checks initializes the velocity and acc variables
-            if (eventAction == MotionEvent.ACTION_UP) {
-                stopX = X;
-                stopY = Y;
-                if (canFlick) {
-                    positionInitX =0;
-                    positionInitY = 0;
-                    float deltaX = stopX - startX;
-                    float deltaY = stopY - startY;
-                    double difference;
+        if (eventAction == MotionEvent.ACTION_UP) {
+            stopX = X;
+            stopY = Y;
+            if (canFlick) {
+                positionInitX = 0;
+                positionInitY = 0;
+                float deltaX = stopX - startX;
+                float deltaY = stopY - startY;
+                double difference;
 //                    if ((deltaX >= -50 && deltaX <= 50)) {
 //                        deltaX = 0;
 //                    }
 //                    if ((deltaY >= -50 && deltaY <= 50)) {
 //                        deltaY = 0;
 //                    }
-                    deltaX = deltaX / displayMetrics.xdpi;
-                    deltaY = deltaY / displayMetrics.ydpi;
-                    long stopTime = System.currentTimeMillis();
-                    difference = (stopTime - startTimeTouch) * 0.001;
+                deltaX = deltaX / displayMetrics.xdpi;
+                deltaY = deltaY / displayMetrics.ydpi;
+                long stopTime = System.currentTimeMillis();
+                difference = (stopTime - startTimeTouch) * 0.001;
 
 
-                    velocityXinit = flicker_multiplier * (deltaX / (float) difference);
-                    velocityYinit = flicker_multiplier * (deltaY / (float) difference);
+                velocityXinit = flicker_multiplier * (deltaX / (float) difference);
+                velocityYinit = flicker_multiplier * (deltaY / (float) difference);
 //                    float maxVal = Math.max(abs(velocityXinit), abs(velocityYinit));
 //                    velocityXinit = velocityXinit<0?maxVal*(-1):maxVal;
 //                    velocityYinit = velocityYinit<0?maxVal*(-1):maxVal;
-                    accXinit = frictionCoefficient * ((float) 286);
-                    accYinit = frictionCoefficient * ((float) 286);
-                    if (accXinit != 0 && accYinit != 0) {
-                        totalXtravel = abs((velocityXinit) / (-1 * (accXinit)));
-                        totalYtravel = abs((velocityYinit) / (-1 * (accXinit)));
-                    } else {
-                        totalXtravel = 1;
-                        totalYtravel = 1;
-                    }
-
-                    startMoving = true;
-                    startX = stopX;
-                    startY = stopY;
+                accXinit = frictionCoefficient * ((float) 286);
+                accYinit = frictionCoefficient * ((float) 286);
+                if (accXinit != 0 && accYinit != 0) {
+                    totalXtravel = abs((velocityXinit) / (-1 * (accXinit)));
+                    totalYtravel = abs((velocityYinit) / (-1 * (accXinit)));
+                } else {
+                    totalXtravel = 1;
+                    totalYtravel = 1;
                 }
-            }
 
+                startMoving = true;
+                startX = stopX;
+                startY = stopY;
+            }
+        }
 
 
         return true;
     }
 
     @Override
-    public void onWindowFocusChanged(boolean hasFocus)
-    {
+    public void onWindowFocusChanged(boolean hasFocus) {
         if (!hasFocus)
             return;
 
@@ -625,30 +609,27 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
         panelHeight = ep.getHeight();
         xCenter = panelWidth / 2f;
         yCenter = panelHeight / 2f;
-        if(orderOfControl.equals("Flicker"))
-        {
+        if (orderOfControl.equals("Flicker")) {
 
-            if(hand.equals("Left")){
+            if (hand.equals("Left")) {
                 ep.xBall = radius;
                 ep.yBall = panelHeight - radius;
-                ep.startX = radius - 300 ;
-                ep.startY = panelHeight - radius ;
+                ep.startX = radius - 300;
+                ep.startY = panelHeight - radius;
                 ep.practiceX = radius;
                 ep.practiceY = panelHeight - radius - 300;
-            }
-            else{
-            ep.xBall = panelWidth - radius;
-            ep.yBall = panelHeight - (radius);
+            } else {
+                ep.xBall = panelWidth - radius;
+                ep.yBall = panelHeight - (radius);
 
-                ep.startX = panelWidth - radius - 300 ;
-                ep.startY = panelHeight - radius ;
+                ep.startX = panelWidth - radius - 300;
+                ep.startY = panelHeight - radius;
                 ep.practiceX = panelWidth - radius;
                 ep.practiceY = panelHeight - radius - 300;
             }
-        }
-        else{
-        ep.xBall = xCenter;
-        ep.yBall = yCenter; // start the ball in the center of the display
+        } else {
+            ep.xBall = xCenter;
+            ep.yBall = yCenter; // start the ball in the center of the display
 
         }
 
@@ -668,15 +649,14 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
         // compute scaling factor
         float scaleFactor = span / (largestAmplitude + largestWidth); // scale factor computed
 
-        if(orderOfControl.equals("Flicker")){
+        if (orderOfControl.equals("Flicker")) {
             // now do the scaling
             scaleFactor = 1;
             for (int i = 0; i < amplitude.length; ++i) // scale amplitudes
                 amplitude[i] *= scaleFactor;
             for (int i = 0; i < width.length; ++i) // scale widths
                 width[i] *= scaleFactor;
-        }
-        else {
+        } else {
             // now do the scaling
             for (int i = 0; i < amplitude.length; ++i) // scale amplitudes
                 amplitude[i] *= scaleFactor;
@@ -709,9 +689,8 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
      * http://stackoverflow.com/questions/4553650/how-to-check-device-natural-default-orientation-on-
      * android-i-e-get-landscape
      */
-    public int getDefaultDeviceOrientation()
-    {
-        WindowManager windowManager = (WindowManager)getSystemService(WINDOW_SERVICE);
+    public int getDefaultDeviceOrientation() {
+        WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         Configuration config = getResources().getConfiguration();
         int rotation = windowManager.getDefaultDisplay().getRotation();
 
@@ -725,8 +704,7 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
     }
 
     // convert the amplitude/width string in the spinners to float array
-    private float[] getValues(String valuesArg)
-    {
+    private float[] getValues(String valuesArg) {
         String[] s = valuesArg.split("[\\s]*,[\\s]*");
         float[] f = new float[s.length];
         for (int i = 0; i < s.length; ++i)
@@ -734,33 +712,28 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
         return f;
     }
 
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
         sm.registerListener(this, sO, SensorManager.SENSOR_DELAY_GAME);
         sm.registerListener(this, sA, SensorManager.SENSOR_DELAY_GAME);
         sm.registerListener(this, sM, SensorManager.SENSOR_DELAY_GAME);
     }
 
-    protected void onPause()
-    {
+    protected void onPause() {
         super.onPause();
         sm.unregisterListener(this);
     }
 
     // implement SensorEventListener methods
-    public void onAccuracyChanged(Sensor sensor, int accuracy)
-    {
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
 
-    public void onSensorChanged(SensorEvent se)
-    {
+    public void onSensorChanged(SensorEvent se) {
         // =======================================================
         // DETERMINE DEVICE PITCH AND ROLL (VARIES BY SENSOR MODE)
         // =======================================================
 
-        switch (sensorMode)
-        {
+        switch (sensorMode) {
             // ---------------------------------------------------------------------------------------------
             case ORIENTATION:
                 pitch = se.values[1];
@@ -775,8 +748,7 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
                 if (se.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD)
                     magValues = lowPass(se.values.clone(), magValues, alpha); // filtered
 
-                if (accValues != null && magValues != null)
-                {
+                if (accValues != null && magValues != null) {
                     // compute pitch and roll
                     float R[] = new float[9];
                     float I[] = new float[9];
@@ -794,13 +766,13 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
             // ---------------------------------------------------------------------------------------------
             case ACCELEROMETER_ONLY:
 
-				/*
+                /*
                  * Use this mode if the device has an accelerometer but no magnetic field sensor and
-				 * no orientation sensor (e.g., HTC Desire C, Asus MeMOPad). This algorithm doesn't
-				 * work quite as well, unfortunately. See...
-				 *
-				 * http://www.hobbytronics.co.uk/accelerometer-info
-				 */
+                 * no orientation sensor (e.g., HTC Desire C, Asus MeMOPad). This algorithm doesn't
+                 * work quite as well, unfortunately. See...
+                 *
+                 * http://www.hobbytronics.co.uk/accelerometer-info
+                 */
 
                 // smooth the sensor values using a low-pass filter
                 if (se.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
@@ -809,77 +781,70 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
                 x = accValues[0];
                 y = accValues[1];
                 z = accValues[2];
-                pitch = -(float)Math.atan(y / Math.sqrt(x * x + z * z)) * RADIANS_TO_DEGREES;
-                roll = (float)Math.atan(x / Math.sqrt(y * y + z * z)) * RADIANS_TO_DEGREES;
+                pitch = -(float) Math.atan(y / Math.sqrt(x * x + z * z)) * RADIANS_TO_DEGREES;
+                roll = (float) Math.atan(x / Math.sqrt(y * y + z * z)) * RADIANS_TO_DEGREES;
                 break;
         }
     }
 
-    private void configureTaskCircles(int awIdx)
-    {
-        if(orderOfControl.equals("Flicker")){
+    private void configureTaskCircles(int awIdx) {
+        if (orderOfControl.equals("Flicker")) {
             int i = 0;
             float radius = (aw[awIdx].a);
 
             //Getting the angle of the arch via start and end points
             float xCenter = ep.xBall;
             float yCenter = ep.yBall;
-            float endX = panelWidth-(panelWidth*0.9f);
-            float dX = (endX-xCenter);
-            float endY = (float)Math.sqrt((radius*radius)-(dX*dX));
-            float dY = (yCenter-endY) - (yCenter-radius);
-            float dis = (float) Math.sqrt(dX*dX + dY*dY); //distance between the points
-            double a = Math.acos(1-((dis*dis)/(2*(radius*radius)))); //the angle between the points is 1 - (dis^2/2radius^2)
-            float diff = xCenter/numberOfCircles-1; //Getting the distance between the points
+            float endX = panelWidth - (panelWidth * 0.9f);
+            float dX = (endX - xCenter);
+            float endY = (float) Math.sqrt((radius * radius) - (dX * dX));
+            float dY = (yCenter - endY) - (yCenter - radius);
+            float dis = (float) Math.sqrt(dX * dX + dY * dY); //distance between the points
+            double a = Math.acos(1 - ((dis * dis) / (2 * (radius * radius)))); //the angle between the points is 1 - (dis^2/2radius^2)
+            float diff = xCenter / numberOfCircles - 1; //Getting the distance between the points
             float prevPoint = xCenter;
-            if(radius>700) {
+            if (radius > 700) {
                 while (i < numberOfCircles) {
                     float x = prevPoint;
-                    float difX = x-xCenter;
+                    float difX = x - xCenter;
                     float y = (float) Math.sqrt((radius * radius) - (difX * difX));
                     ep.taskCircles[i] = new Circle(x, abs(yCenter - y), aw[awIdx].w / 2f, Circle.NORMAL);
                     prevPoint = prevPoint - diff;
                     i++;
                 }
-            }
-            else{
-                while(i<numberOfCircles)
-                {
-                    float x = ep.xBall - (aw[awIdx].a) * (float)Math.cos(a * ((float)i/ (numberOfCircles)));
-                    if(x<0){
+            } else {
+                while (i < numberOfCircles) {
+                    float x = ep.xBall - (aw[awIdx].a) * (float) Math.cos(a * ((float) i / (numberOfCircles)));
+                    if (x < 0) {
                         x = xCenter + x;
                     }
-                    float y = ep.yBall - (aw[awIdx].a) * (float)Math.sin(a * ((float)i/ (numberOfCircles)));
+                    float y = ep.yBall - (aw[awIdx].a) * (float) Math.sin(a * ((float) i / (numberOfCircles)));
                     ep.taskCircles[i] = new Circle(abs(x), abs(y), aw[awIdx].w / 2f, Circle.NORMAL);
                     i++;
                 }
             }
 
-        }
-        else{
-            for (int i = 0; i < numberOfCircles; ++i)
-            {
-                float x = xCenter + (aw[awIdx].a / 2f) * (float)Math.cos(TWO_TIMES_PI * ((float)i / numberOfCircles));
-                float y = yCenter + (aw[awIdx].a / 2f) * (float)Math.sin(TWO_TIMES_PI * ((float)i / numberOfCircles));
+        } else {
+            for (int i = 0; i < numberOfCircles; ++i) {
+                float x = xCenter + (aw[awIdx].a / 2f) * (float) Math.cos(TWO_TIMES_PI * ((float) i / numberOfCircles));
+                float y = yCenter + (aw[awIdx].a / 2f) * (float) Math.sin(TWO_TIMES_PI * ((float) i / numberOfCircles));
                 ep.taskCircles[i] = new Circle(x, y, aw[awIdx].w / 2f, Circle.NORMAL);
             }
 
         }
-        id = (float)Math.log(aw[awIdx].a / (aw[awIdx].w - ballDiameter) + 1f) / LOG_TWO;
+        id = (float) Math.log(aw[awIdx].a / (aw[awIdx].w - ballDiameter) + 1f) / LOG_TWO;
 
         // Don't set target yet. This is done when start circle is selected.
     }
 
-    private AmplitudeWidth[] getAmplitudeWidthArray(float[] aArray, float[] wArray)
-    {
+    private AmplitudeWidth[] getAmplitudeWidthArray(float[] aArray, float[] wArray) {
         AmplitudeWidth[] aw = new AmplitudeWidth[aArray.length * wArray.length];
         for (int i = 0; i < aw.length; ++i)
             aw[i] = new AmplitudeWidth(aArray[i / wArray.length], wArray[i % wArray.length]);
 
         // shuffle
         Random r = new Random();
-        for (int i = 0; i < aw.length; ++i)
-        {
+        for (int i = 0; i < aw.length; ++i) {
             int idx = r.nextInt(aw.length);
             AmplitudeWidth temp = aw[idx];
             aw[idx] = aw[i];
@@ -888,8 +853,7 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
         return aw;
     }
 
-    private void doStartCircleClicked()
-    {
+    private void doStartCircleClicked() {
         resetPosition();
         if (ep.done) // start circle displayed after last sequence, select to finish
             doEndBlock();
@@ -897,8 +861,7 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
         ep.waitStartCircleSelect = false;
         ep.waitPracticeCircleSelect = false;
 
-        if (practiceMode)
-        {
+        if (practiceMode) {
             practiceMode = false;
             awIdx = 0;
         }
@@ -911,8 +874,7 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
         if (auditoryFeedback)
             clickSound.start();
 
-        if (awIdx < aw.length)
-        {
+        if (awIdx < aw.length) {
             ep.taskCircles = new Circle[numberOfCircles];
             configureTaskCircles(awIdx);
 
@@ -923,8 +885,7 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
         selectionCount = 0;
     }
 
-    private void doPracticeCircleClicked()
-    {
+    private void doPracticeCircleClicked() {
         resetPosition();
         // provide feedback (as per setup)
         if (vibrotactileFeedback)
@@ -935,19 +896,16 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
         ep.waitPracticeCircleSelect = false;
         ep.waitStartCircleSelect = false;
 
-        if (practiceMode)
-        {
+        if (practiceMode) {
             even = false;
             ++awIdx;
-            if (awIdx < aw.length)
-            {
+            if (awIdx < aw.length) {
                 configureTaskCircles(awIdx);
                 ep.taskCircles[0].status = Circle.TARGET;
                 ep.targetCircle = ep.taskCircles[0];
             } else
                 ep.done = true;
-        } else
-        {
+        } else {
             practiceMode = true;
             even = false;
             awIdx = 0;
@@ -960,10 +918,8 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
     }
 
     // Done! close data files and exit
-    private void doEndBlock()
-    {
-        try
-        {
+    private void doEndBlock() {
+        try {
             sd1.close();
             sd2.close();
             sd3.close();
@@ -972,29 +928,29 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
             // There seems to be bug doing this with Android 4.4.  I'm using the following
             // code, instead of sendBroadcast.  See...
             // http://code.google.com/p/android/issues/detail?id=38282
-            MediaScannerConnection.scanFile(this, new String[] {f1.getAbsolutePath(),
+            MediaScannerConnection.scanFile(this, new String[]{f1.getAbsolutePath(),
                     f2.getAbsolutePath(), f3.getAbsolutePath()}, null, null);
-        } catch (IOException e)
-        {
+        } catch (IOException e) {
             Log.d("MYDEBUG", "file close exception: " + e);
         }
         this.finish();
     }
-    void resetPosition(){
-        if(orderOfControl.equals("Flicker")){
+
+    void resetPosition() {
+        if (orderOfControl.equals("Flicker")) {
             startMoving = false;
             canFlick = false;
-            if(hand.equals("Left")){
+            if (hand.equals("Left")) {
                 ep.xBall = radius;
                 ep.yBall = panelHeight - radius;
-            }
-            else{
-            ep.xBall = panelWidth - radius;
-            ep.yBall = panelHeight - radius;
+            } else {
+                ep.xBall = panelWidth - radius;
+                ep.yBall = panelHeight - radius;
             }
         }
     }
-    void failed(){
+
+    void failed() {
         errorCount++;
         if (vibrotactileFeedback)
             vib.vibrate(VIBRATION_PULSE_DURATION);
@@ -1003,11 +959,9 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
     }
 
 
-
-    void doTargetSelected()
-    {
+    void doTargetSelected() {
         // provide feedback (as per setup)
-            resetPosition();
+        resetPosition();
 
         if (vibrotactileFeedback)
             vib.vibrate(VIBRATION_PULSE_DURATION);
@@ -1017,7 +971,7 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
         if (!sequenceStarted) // 1st target selection (beginning of sequence)
         {
             // first trace sample for sequence (on select of 1st target)
-            traceArray.add(new TracePoint((int)xBallCenter, (int)yBallCenter, (int)(now / 1000000), tiltMagnitude));
+            traceArray.add(new TracePoint((int) xBallCenter, (int) yBallCenter, (int) (now / 1000000), tiltMagnitude));
             sequenceStarted = true;
             startTime = now;
             advanceTarget();
@@ -1038,8 +992,8 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
             traceArray = new ArrayList<TracePoint>();
 
             // a lot of time is consumed in this constructor (all accuracy measures below are computed)
-            t = new Trace((int)aw[awIdx].a, (int)aw[awIdx].w, (int)ep.fromTargetCircle.x, (int)ep.fromTargetCircle.y,
-                    (int)ep.targetCircle.x, (int)ep.targetCircle.y, ballDiameter, p);
+            t = new Trace((int) aw[awIdx].a, (int) aw[awIdx].w, (int) ep.fromTargetCircle.x, (int) ep.fromTargetCircle.y,
+                    (int) ep.targetCircle.x, (int) ep.targetCircle.y, ballDiameter, p);
 
             positioningTime += t.positioningTime;
             selectionTime += t.selectionTime;
@@ -1057,8 +1011,8 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
             maxTilt += maxTiltTrial;
 
             sb1.append(String.format(Locale.CANADA, "%s,%s,%s,%s,%s,%s,%s,%d,%s,%d,%s,%.1f\n", APP, participantCode,
-                    sessionCode, blockCode, groupCode, conditionCode, orderOfControl, (int)tiltGain, selectionMode,
-                    selectionCount, t.getMeasures(),errorCount,maxTiltTrial));
+                    sessionCode, blockCode, groupCode, conditionCode, orderOfControl, (int) tiltGain, selectionMode,
+                    selectionCount, t.getMeasures(), errorCount, maxTiltTrial));
 
             String base = awIdx + "," + aw[awIdx].a + "," + aw[awIdx].w + "," + selectionCount + ","
                     + ep.fromTargetCircle.x + "," + ep.fromTargetCircle.y + "," + ep.targetCircle.x + ","
@@ -1081,16 +1035,14 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
         {
             /*
              * For all trials, except the last in a sequence, the last sample is the also the first sample of the
-			 * next trial.
-			 */
-            traceArray.add(new TracePoint((int)xBallCenter, (int)yBallCenter, (int)(now / 1000000), tiltMagnitude));
+             * next trial.
+             */
+            traceArray.add(new TracePoint((int) xBallCenter, (int) yBallCenter, (int) (now / 1000000), tiltMagnitude));
         }
     }
 
-    void doEndSequence()
-    {
-        if (practiceMode)
-        {
+    void doEndSequence() {
+        if (practiceMode) {
             // practiceMode = false;
             ep.waitStartCircleSelect = true;
             ep.waitPracticeCircleSelect = true;
@@ -1107,27 +1059,25 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
         sdx = standardDeviation(sdxArray);
         ae /= numberOfCircles;
         we = 4.133f * sdx;
-        ide = (float)Math.log(ae / we + 1) / LOG_TWO;
+        ide = (float) Math.log(ae / we + 1) / LOG_TWO;
         tpe = ide / (movementTime / 1000f);
         maxTilt /= numberOfCircles;
 
         sb2.append(sd2Leader);
         sb2.append(String.format(Locale.CANADA, "%d,%d,%d,%.1f,%.1f,%.1f,%.1f,%.1f,%.1f,%.1f,%.1f,%.1f,%.1f,%d,%d,%d," +
-                        "%d,%.1f,%.1f,%.1f,%.1f\n", numberOfCircles, (int)aw[awIdx].a, (int)aw[awIdx].w, id, ae, sdx,
+                        "%d,%.1f,%.1f,%.1f,%.1f\n", numberOfCircles, (int) aw[awIdx].a, (int) aw[awIdx].w, id, ae, sdx,
                 we, ide, tpe, positioningTime, selectionTime, movementTime, throughput, tre, tac, mdc, odc, mv, me, mo,
                 maxTilt));
 
         // write data to files at end of each sequence
-        try
-        {
+        try {
             sd1.write(sb1.toString(), 0, sb1.length());
             sd1.flush();
             sd2.write(sb2.toString(), 0, sb2.length());
             sd2.flush();
             sd3.write(sb3.toString(), 0, sb3.length());
             sd3.flush();
-        } catch (IOException e)
-        {
+        } catch (IOException e) {
             Log.d("MYDEBUG", "ERROR WRITING TO DATA FILES! e = " + e);
             this.finish();
         }
@@ -1140,7 +1090,7 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
 
         results.append(String.format(Locale.CANADA, "Block %d:", Integer.parseInt(blockCode.substring(1))));
         results.append(String.format(Locale.CANADA, "Sequence %d of %d:", awIdx, aw.length));
-        results.append(String.format(Locale.CANADA, "Tilt gain = %d:", (int)tiltGain));
+        results.append(String.format(Locale.CANADA, "Tilt gain = %d:", (int) tiltGain));
         results.append(String.format("Selection mode = %s:", selectionMode));
         results.append(String.format(Locale.CANADA, "Time = %.1f seconds:", (elapsedTime / 1000f)));
         results.append(String.format(Locale.CANADA, "Throughput = %.2f bps", throughput));
@@ -1162,11 +1112,10 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
             ep.done = true;
     }
 
-    void advanceTarget()
-    {
+    void advanceTarget() {
         int i;
         for (i = 0; i < ep.taskCircles.length; ++i)
-            if(ep.taskCircles != null) {
+            if (ep.taskCircles != null) {
                 if (ep.taskCircles[i].status == Circle.TARGET)
                     break; // i is index of current target
             }
@@ -1191,26 +1140,23 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
     // Low pass filter (smoothing algorithm) for sensor data.
     // See http://blog.thomnichols.org/2011/08/smoothing-sensor-data-with-a-low-pass-filter
     // More work is needed to decide on the best alpha. See comments above.
-    protected float[] lowPass(float[] input, float[] output, float alpha)
-    {
+    protected float[] lowPass(float[] input, float[] output, float alpha) {
         for (int i = 0; i < input.length; i++)
             output[i] = output[i] + alpha * (input[i] - output[i]);
         return output;
     }
 
     // compute standard deviation of values in an int array
-    private float standardDeviation(int[] n)
-    {
+    private float standardDeviation(int[] n) {
         float m = mean(n);
         float t = 0.0f;
         for (int i : n)
             t += (m - i) * (m - i);
-        return (float)Math.sqrt(t / (n.length - 1.0));
+        return (float) Math.sqrt(t / (n.length - 1.0));
     }
 
     // compute the mean of values in a int array
-    private float mean(int n[])
-    {
+    private float mean(int n[]) {
         float mean = 0.0f;
         for (int i : n)
             mean += i;
@@ -1218,41 +1164,35 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
     }
 
     // simple class to hold the amplitude and width for a Fitts' law task
-    private class AmplitudeWidth
-    {
+    private class AmplitudeWidth {
         float a, w;
 
-        AmplitudeWidth(float aArg, float wArg)
-        {
+        AmplitudeWidth(float aArg, float wArg) {
             a = aArg;
             w = wArg;
         }
     }
 
     // screen updates are initiated in onFinish which executes every REFRESH_INTERVAL milliseconds
-    private class ScreenRefreshTimer extends CountDownTimer
-    {
+    private class ScreenRefreshTimer extends CountDownTimer {
 
-        ScreenRefreshTimer(long millisInFuture, long countDownInterval)
-        {
+        ScreenRefreshTimer(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
         }
 
         @Override
-        public void onTick(long millisUntilFinished)
-        {
+        public void onTick(long millisUntilFinished) {
         }
 
         @Override
-        public void onFinish()
-        {
+        public void onFinish() {
             // get current time and delta since last onDraw
             now = System.nanoTime();
             dT = (now - lastT) / 1000000000f; // seconds
             lastT = now;
 
-            tiltMagnitude = (float)Math.sqrt(pitch * pitch + roll * roll);
-            tiltAngle = tiltMagnitude == 0f ? 0f : (float)Math.asin(roll / tiltMagnitude) * RADIANS_TO_DEGREES;
+            tiltMagnitude = (float) Math.sqrt(pitch * pitch + roll * roll);
+            tiltAngle = tiltMagnitude == 0f ? 0f : (float) Math.asin(roll / tiltMagnitude) * RADIANS_TO_DEGREES;
 
             if (pitch > 0 && roll > 0)
                 tiltAngle = 360f - tiltAngle;
@@ -1271,13 +1211,12 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
                 dBall = dT * velocity; // make the ball move this amount (pixels)
 
                 // compute the ball's new coordinates
-                float dx = (float)Math.sin(tiltAngle * DEGREES_TO_RADIANS) * dBall;
-                float dy = -(float)Math.cos(tiltAngle * DEGREES_TO_RADIANS) * dBall;
+                float dx = (float) Math.sin(tiltAngle * DEGREES_TO_RADIANS) * dBall;
+                float dy = -(float) Math.cos(tiltAngle * DEGREES_TO_RADIANS) * dBall;
                 ep.xBall += dx;
                 ep.yBall += dy;
 
-            }
-            else if (orderOfControl.equals("Position")) // position control
+            } else if (orderOfControl.equals("Position")) // position control
             {
                 // compute how far the ball should move
                 dBall = tiltMagnitude * tiltGain;
@@ -1285,9 +1224,9 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
                 // compute the ball's new coordinates
 
                 // the following is an attempt to fix some jitter/jump issues with ball movement
-                float sin = (float)Math.sin(tiltAngle * DEGREES_TO_RADIANS);
+                float sin = (float) Math.sin(tiltAngle * DEGREES_TO_RADIANS);
                 sin = (sin == 1) ? -sin : sin;
-                float cos = (float)Math.cos(tiltAngle * DEGREES_TO_RADIANS);
+                float cos = (float) Math.cos(tiltAngle * DEGREES_TO_RADIANS);
                 cos = (cos == 1) ? -cos : cos;
 
                 float dx = sin * dBall;
@@ -1296,9 +1235,8 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
                 ep.yBall = yCenter + dy;
 
 
-            } else if (orderOfControl.equals("Physics1"))
-            {
-                float multiplier = 1  ; //Multiplier
+            } else if (orderOfControl.equals("Physics1")) {
+                float multiplier = 1; //Multiplier
                 float dPitch = Math.round(-pitch);
                 float dRoll = Math.round(-roll);
                 DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -1310,38 +1248,41 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
                 display.getSize(size);
 
                 //Getting the position of X
-                float accX = ((float)5/7)*((float)386.09) * ((float)Math.sin(dRoll*DEGREES_TO_RADIANS));
+                float accX = ((float) 5 / 7) * ((float) 386.09) * ((float) Math.sin(dRoll * DEGREES_TO_RADIANS));
                 float velocityX;
                 float positionX = 0f;
-                velocityX = velocityInitX + accX*dT;
-                float dX = velocityX*dT;
+                velocityX = velocityInitX + accX * dT;
+                float dX = velocityX * dT;
                 float oldPositionX = positionX;
-                positionX =positionInitX + dX*multiplier + (1/2 * accX * (float)Math.pow(dT,2));
+                positionX = positionInitX + dX * multiplier + (1 / 2 * accX * (float) Math.pow(dT, 2));
                 //positionX =positionInitX + dX*multiplier;
                 float positionX_pixels = positionX * displayMetrics.xdpi;
-                if(abs(positionX) > (width/2)) positionX = oldPositionX;
-
+                if (abs(positionX) > (width / 2)) positionX = oldPositionX;
 
 
                 //Getting the position of Y
-                float accY = ((float)5/7)*((float)386.09) * ((float)Math.sin(dPitch*DEGREES_TO_RADIANS));
+                float accY = ((float) 5 / 7) * ((float) 386.09) * ((float) Math.sin(dPitch * DEGREES_TO_RADIANS));
                 float velocityY;
                 float positionY = positionInitY;
-                velocityY = velocityInitY + accY*dT;
-                float dY = velocityY*dT;
+                velocityY = velocityInitY + accY * dT;
+                float dY = velocityY * dT;
                 float oldPosition = positionY;
-                positionY =positionInitY + dY*multiplier + (1/2 * accY * (float)Math.pow(dT, 2));
+                positionY = positionInitY + dY * multiplier + (1 / 2 * accY * (float) Math.pow(dT, 2));
                 //positionY =positionInitY + dY*multiplier;
                 float positionY_pixels = positionY * displayMetrics.ydpi;
-                if(abs(positionY) > (height/2)) positionY = oldPosition;
+                if (abs(positionY) > (height / 2)) positionY = oldPosition;
 
-                float x =  xCenter + positionX_pixels;
+                float x = xCenter + positionX_pixels;
                 float positionX_old = positionInitX + xCenter;
-                if((positionX_old < width && positionX_old>=0) && !(x < width && x>=0)){
-                  if(x<=0){x=0;} else {x=width-1;}
+                if ((positionX_old < width && positionX_old >= 0) && !(x < width && x >= 0)) {
+                    if (x <= 0) {
+                        x = 0;
+                    } else {
+                        x = width - 1;
+                    }
                 }
 
-                if(x < width && x>=0) {
+                if (x < width && x >= 0) {
                     ep.xBall = x;
                     positionInitX = positionX;
                     velocityInitX = velocityX - velocityInitX;
@@ -1349,11 +1290,10 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
                 }
 
                 float y = yCenter + positionY_pixels;
-                if(y <height && y>=0)
-                {
-                    ep.yBall =  y;
+                if (y < height && y >= 0) {
+                    ep.yBall = y;
                     positionInitY = positionY;
-                    velocityInitY =  velocityY - velocityInitY;
+                    velocityInitY = velocityY - velocityInitY;
 
                 }
 
@@ -1361,25 +1301,23 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
                 initPosX = positionX;
                 initPosY = positionY;
 
-                Log.e("Info Delta", "Position X:"+ positionX+" Position Y:"+ positionY);
-            } else if (orderOfControl.equals("Friction"))
-            {
+                Log.e("Info Delta", "Position X:" + positionX + " Position Y:" + positionY);
+            } else if (orderOfControl.equals("Friction")) {
 
                 float dPitch = Math.round(-pitch);
                 float dRoll = Math.round(-roll);
                 float frictionX, frictionY;
 
                 //Check if it was moving from prev round and based on that checks friction
-                if(moving_x || moving_y){
-                    frictionX = (frictionCoefficient)*(float)Math.cos(dRoll*DEGREES_TO_RADIANS);
-                    frictionY = (frictionCoefficient)*(float)Math.cos(dPitch*DEGREES_TO_RADIANS);
-                }
-                else{
-                    frictionX = ((float)abs(Math.tan(dRoll*DEGREES_TO_RADIANS)));
-                    frictionY = ((float)abs(Math.tan(dPitch*DEGREES_TO_RADIANS)));
+                if (moving_x || moving_y) {
+                    frictionX = (frictionCoefficient) * (float) Math.cos(dRoll * DEGREES_TO_RADIANS);
+                    frictionY = (frictionCoefficient) * (float) Math.cos(dPitch * DEGREES_TO_RADIANS);
+                } else {
+                    frictionX = ((float) abs(Math.tan(dRoll * DEGREES_TO_RADIANS)));
+                    frictionY = ((float) abs(Math.tan(dPitch * DEGREES_TO_RADIANS)));
                 }
 
-                float multiplier = 1  ; //Multiplier
+                float multiplier = 1; //Multiplier
 
                 DisplayMetrics displayMetrics = new DisplayMetrics();
                 getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -1391,90 +1329,81 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
 
 
                 //Getting the position of X
-                float accX = ((float)5/7)*((float)386.09) * ((float)Math.sin(dRoll*DEGREES_TO_RADIANS));
+                float accX = ((float) 5 / 7) * ((float) 386.09) * ((float) Math.sin(dRoll * DEGREES_TO_RADIANS));
                 float velocityX;
                 float positionX = 0f;
-                velocityX = (velocityInitX + accX*dT) - ((frictionX)*(velocityInitX + accX*dT));
-                float dX = velocityX*dT;
-                positionX =positionInitX + dX*multiplier + (1/2 * accX * (float)Math.pow(dT,2));
+                velocityX = (velocityInitX + accX * dT) - ((frictionX) * (velocityInitX + accX * dT));
+                float dX = velocityX * dT;
+                positionX = positionInitX + dX * multiplier + (1 / 2 * accX * (float) Math.pow(dT, 2));
                 float positionX_pixels = positionX * displayMetrics.xdpi;
 
                 //Getting the position of Y
-                float accY = ((float)5/7)*((float)386.09) * ((float)Math.sin(dPitch*DEGREES_TO_RADIANS));
+                float accY = ((float) 5 / 7) * ((float) 386.09) * ((float) Math.sin(dPitch * DEGREES_TO_RADIANS));
                 float velocityY;
                 float positionY = positionInitY;
-                velocityY = (velocityInitY + accY*dT) - ((frictionY)*(velocityInitY + accY*dT));
-                float dY = velocityY*dT;
+                velocityY = (velocityInitY + accY * dT) - ((frictionY) * (velocityInitY + accY * dT));
+                float dY = velocityY * dT;
                 float oldPosition = positionY;
-                positionY =positionInitY + dY*multiplier + (1/2 * accY * (float)Math.pow(dT, 2));
+                positionY = positionInitY + dY * multiplier + (1 / 2 * accY * (float) Math.pow(dT, 2));
                 float positionY_pixels = positionY * displayMetrics.ydpi;
-                if(abs(positionY) > (height/2)) positionY = oldPosition;
+                if (abs(positionY) > (height / 2)) positionY = oldPosition;
 
                 //Updates the position of the ball
-                if((xCenter + positionX_pixels) < width && (xCenter + positionX_pixels) >=0) {
+                if ((xCenter + positionX_pixels) < width && (xCenter + positionX_pixels) >= 0) {
                     ep.xBall = xCenter + positionX_pixels;
                     positionInitX = positionX;
                     velocityInitX = velocityX - velocityInitX;
-                    if(abs(velocityInitX) > 0){
+                    if (abs(velocityInitX) > 0) {
                         moving_x = true;
-                    }
-                    else{
+                    } else {
                         moving_x = false;
                     }
 
                 }
-                if((yCenter + positionY_pixels) <height && (yCenter + positionY_pixels)>=0)
-                {
-                    ep.yBall =  yCenter + positionY_pixels;
+                if ((yCenter + positionY_pixels) < height && (yCenter + positionY_pixels) >= 0) {
+                    ep.yBall = yCenter + positionY_pixels;
                     positionInitY = positionY;
-                    velocityInitY =  velocityY - velocityInitY;
-                    if(abs(velocityInitY) > 0){
+                    velocityInitY = velocityY - velocityInitY;
+                    if (abs(velocityInitY) > 0) {
                         moving_y = true;
-                    }
-                    else{
+                    } else {
                         moving_y = false;
                     }
 
                 }
 
 
-            }
-            else if (orderOfControl.equals("Flicker"))
-            {
+            } else if (orderOfControl.equals("Flicker")) {
                 //The Flick Order of Control for Testing
                 DisplayMetrics displayMetrics = new DisplayMetrics();
                 getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
                 int height = displayMetrics.heightPixels;
                 int width = displayMetrics.widthPixels;
 
-                if(startMoving) {
-                    accXinit = ((velocityXinit>0)? accXinit*(-1) : accXinit);
-                    accYinit = ((velocityYinit >0)? accYinit*(-1) : accYinit);
-                    float positionX = velocityXinit*dT - ((accXinit/2)*(float)Math.pow(((double) dT),2));
+                if (startMoving) {
+                    accXinit = ((velocityXinit > 0) ? accXinit * (-1) : accXinit);
+                    accYinit = ((velocityYinit > 0) ? accYinit * (-1) : accYinit);
+                    float positionX = velocityXinit * dT - ((accXinit / 2) * (float) Math.pow(((double) dT), 2));
                     positionX = (positionX) * displayMetrics.xdpi;
-                    float positionY = velocityYinit *dT - ((accYinit/2)*(float)Math.pow(((double) dT),2));
+                    float positionY = velocityYinit * dT - ((accYinit / 2) * (float) Math.pow(((double) dT), 2));
                     positionY = (positionY) * displayMetrics.ydpi;
                     float x = ep.xBall + positionX;
                     float y = ep.yBall + positionY;
-                    if(x<width && x>0)
-                    {
+                    if (x < width && x > 0) {
                         ep.xBall += positionX;
                         positionInitX = positionX - positionInitX;
                         totalTime += dT;
                         prevXvelocity = velocityXinit;
-                        float f = velocityXinit + accYinit*dT;
-                        if(f>0 && velocityXinit>0){
+                        float f = velocityXinit + accYinit * dT;
+                        if (f > 0 && velocityXinit > 0) {
                             velocityXinit = f;
-                        }
-                        else if(f<0 &&  velocityXinit<0){
+                        } else if (f < 0 && velocityXinit < 0) {
                             velocityXinit = f;
-                        }
-                        else{
+                        } else {
                             velocityXinit = 0;
                             positionInitX = 0;
                         }
-                    }
-                    else{
+                    } else {
                         positionX = 0;
 
                         try {
@@ -1486,26 +1415,22 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
                         failed();
                     }
 
-                    if(y<height && y>0)
-                    {
+                    if (y < height && y > 0) {
                         ep.yBall += positionY;
                         positionInitY = positionY - positionInitY;
                         totalTime += dT;
                         prevYvelocity = velocityYinit;
-                        float f = velocityYinit +accYinit*dT;
-                        if(f>0 && velocityYinit >0){
+                        float f = velocityYinit + accYinit * dT;
+                        if (f > 0 && velocityYinit > 0) {
                             velocityYinit = f;
-                        }
-                        else if(f<0 &&  velocityYinit <0){
+                        } else if (f < 0 && velocityYinit < 0) {
                             velocityYinit = f;
-                        }
-                        else{
+                        } else {
                             velocityYinit = 0;
                             positionInitY = 0;
 
                         }
-                    }
-                    else{
+                    } else {
                         positionY = 0;
                         startMoving = false;
 
@@ -1525,9 +1450,9 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
 //
 //                    }
 
-                    Log.d("movements", "prevY:"+prevYvelocity+", velocityY:"+velocityYinit+", prevX:"+prevXvelocity+", velocityX:"+velocityXinit);
+                    Log.d("movements", "prevY:" + prevYvelocity + ", velocityY:" + velocityYinit + ", prevX:" + prevXvelocity + ", velocityX:" + velocityXinit);
 //
-                    if((prevYvelocity == 0 && velocityYinit == 0) && velocityXinit == 0){
+                    if ((prevYvelocity == 0 && velocityYinit == 0) && velocityXinit == 0) {
                         Log.d("movements", "stopY");
 
                         try {
@@ -1537,8 +1462,7 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
                         }
                         resetPosition();
                         failed();
-                    }
-                    else if((prevXvelocity == 0 && velocityXinit == 0) && velocityYinit == 0){
+                    } else if ((prevXvelocity == 0 && velocityXinit == 0) && velocityYinit == 0) {
                         Log.d("movements", "stopX");
 
                         try {
@@ -1547,7 +1471,8 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
                             e.printStackTrace();
                         }
                         resetPosition();
-                        failed();}
+                        failed();
+                    }
 //                    }else if((prevXvelocity != 0 && velocityXinit == 0) || (prevYvelocity!=0 && velocityYinit == 0)){
 //                        //ep.targetCircle.collidedWithCircle(ep.xBall, ep.yBall);
 //                        try {
@@ -1574,18 +1499,17 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
             yBallCenter = ep.yBall + ballDiameter / 2f;
 
             // if trials in progress, collect sample (and check for new maximum tilt)
-            if (sequenceStarted)
-            {
-                traceArray.add(new TracePoint((int)xBallCenter, (int)yBallCenter, (int)(now / 1000000), tiltMagnitude));
+            if (sequenceStarted) {
+                traceArray.add(new TracePoint((int) xBallCenter, (int) yBallCenter, (int) (now / 1000000), tiltMagnitude));
                 maxTiltTrial = Math.max(tiltMagnitude, maxTiltTrial);
             }
 
-            if(orderOfControl.equals("Flicker")){
+            if (orderOfControl.equals("Flicker")) {
                 if (!ep.waitStartCircleSelect && ep.targetCircle != null
                         && (ep.targetCircle.inCircle(xBallCenter, yBallCenter, ballDiameter)
                         || ep.targetCircle.collidedWithCircle(xBallCenter, yBallCenter, prevXposition, prevYposition, ballDiameter)
                 )
-                        )// YES
+                )// YES
                 {
 
                     if (selectionMode.equals("First_Entry")) // CAUTION: potential string edit bug
@@ -1602,12 +1526,12 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
                     }
                 }
 
-            }else {
+            } else {
                 // Is the ball inside target circle?
                 if (!ep.waitStartCircleSelect && ep.targetCircle != null
                         && ep.targetCircle.inCircle(xBallCenter, yBallCenter, ballDiameter)
                 )
-                        // YES
+                // YES
                 {
 
                     if (selectionMode.equals("First_Entry")) // CAUTION: potential string edit bug
@@ -1633,15 +1557,13 @@ public class FittsTiltActivity extends Activity implements SensorEventListener
                 dwellPending = false;
                 dwellTimer.cancel();
             }
-            if(orderOfControl.equals("Flicker"))
-            {
+            if (orderOfControl.equals("Flicker")) {
                 if (ep.waitStartCircleSelect && (ep.startCircle.inCircle(xBallCenter, yBallCenter, ballDiameter) || ep.startCircle.collidedWithCircle(xBallCenter, yBallCenter, prevXposition, prevYposition, ballDiameter)))
                     doStartCircleClicked();
                 else if (ep.waitPracticeCircleSelect && !sequenceStarted
                         && (ep.practiceCircle.inCircle(xBallCenter, yBallCenter, ballDiameter) || ep.practiceCircle.collidedWithCircle(xBallCenter, yBallCenter, prevXposition, prevYposition, ballDiameter)))
                     doPracticeCircleClicked();
-            }
-            else{
+            } else {
                 if (ep.waitStartCircleSelect && ep.startCircle.inCircle(xBallCenter, yBallCenter, ballDiameter))
                     doStartCircleClicked();
                 else if (ep.waitPracticeCircleSelect && !sequenceStarted

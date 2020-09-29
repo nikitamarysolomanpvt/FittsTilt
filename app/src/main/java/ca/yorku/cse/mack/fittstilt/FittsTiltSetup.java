@@ -11,8 +11,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 @SuppressWarnings("unused")
-public class FittsTiltSetup extends Activity
-{
+public class FittsTiltSetup extends Activity {
     final String MYDEBUG = "MYDEBUG"; // for Log.i messages
 
     // ORDER OF CONTROL
@@ -44,7 +43,6 @@ public class FittsTiltSetup extends Activity
     //Visualuzation Matching
     final static String VISULAZATION_MATCH = "Matching";
     final static String VISULAZATION_NOMATCH = "Non Matching";
-
 
 
     //Radius
@@ -102,19 +100,19 @@ public class FittsTiltSetup extends Activity
     String[] conditionCode = {"C01", "C01", "C02", "C03", "C04", "C05", "C06", "C07", "C08", "C09", "C10", "C11",
             "C12", "C13", "C14", "C15", "C16", "C17", "C18", "C19", "C20", "C21", "C22", "C23", "C24", "C25"};
     String[] numberOfTargetsArray = {"15", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16",
-            "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30" };
+            "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30"};
     String[] amplitudesArray = {"125, 250, 500", "125, 250, 500", "250, 500", "500", "500", "750", "1000", "1500", "auto"};
-    String[] widthsArray = {"40, 60, 100", "40, 60, 100", "60, 100", "100", "150", "200",  "100, 150, 200"};
-    String[] ballScaleArray = {"0.5", "0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9","1.0"};
+    String[] widthsArray = {"40, 60, 100", "40, 60, 100", "60, 100", "100", "150", "200", "100, 150, 200"};
+    String[] ballScaleArray = {"0.5", "0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "1.0"};
     String[] orderOfControlArray = {VELOCITY, VELOCITY, POSITION, PHYSICS1, FLICKER, FRICTION};
-    String[] frictionCoefficientArray = {WOOD_METAL_5, WOOD_METAL_0,WOOD_METAL_1, WOOD_METAL_2,WOOD_METAL_3,WOOD_METAL_4,WOOD_METAL_5,WOOD_METAL_6,WOOD_METAL_7,WOOD_METAL_8,WOOD_METAL_9, WOOD_METAL_10};
+    String[] frictionCoefficientArray = {WOOD_METAL_5, WOOD_METAL_0, WOOD_METAL_1, WOOD_METAL_2, WOOD_METAL_3, WOOD_METAL_4, WOOD_METAL_5, WOOD_METAL_6, WOOD_METAL_7, WOOD_METAL_8, WOOD_METAL_9, WOOD_METAL_10};
     // Amit changes
-    String[] frictionCoefficientVisualizationArray = {VISULAZATION_0,VISULAZATION_1,VISULAZATION_2};
-    String[] frictionCoefficientVisualizationMatchingArray = {VISULAZATION_MATCH,VISULAZATION_NOMATCH};
+    String[] frictionCoefficientVisualizationArray = {VISULAZATION_0, VISULAZATION_1, VISULAZATION_2};
+    String[] frictionCoefficientVisualizationMatchingArray = {VISULAZATION_MATCH, VISULAZATION_NOMATCH};
 
-    String[] flickerMultiplier = {"1", Flicker_1, Flicker_2, Flicker_3, Flicker_4, Flicker_5, Flicker_6, Flicker_7, Flicker_8, Flicker_9, Flicker_10 };
+    String[] flickerMultiplier = {"1", Flicker_1, Flicker_2, Flicker_3, Flicker_4, Flicker_5, Flicker_6, Flicker_7, Flicker_8, Flicker_9, Flicker_10};
     String[] handArray = {RIGHT, RIGHT, LEFT};
-    String[] radiusArray = {RADIUS_1, RADIUS_1,RADIUS_2, RADIUS_3, RADIUS_4, RADIUS_5, RADIUS_5, RADIUS_6, RADIUS_7};
+    String[] radiusArray = {RADIUS_1, RADIUS_1, RADIUS_2, RADIUS_3, RADIUS_4, RADIUS_5, RADIUS_5, RADIUS_6, RADIUS_7};
     String[] gainArray = {MEDIUM, VERY_LOW, LOW, MEDIUM, HIGH, VERY_HIGH};
     String gainString;
     String[] selectionModeArray = {FIRST_ENTRY, FIRST_ENTRY, DWELL_500, DWELL_400, DWELL_300};
@@ -127,7 +125,7 @@ public class FittsTiltSetup extends Activity
     private Spinner spinParticipant, spinSession, spinGroup, spinCondition, spinHand, spinRadius;
     private Spinner spinNumTargets, spinAmplitude, spinWidth, spinBallScale;
     private Spinner spinOrderOfControl;
-    private Spinner spinFrictionCoefficient, spinFlickMult,spinFrictionCoefficientVisualuzation,paramFrictionCoefficientVisualuzationMatching;
+    private Spinner spinFrictionCoefficient, spinFlickMult, spinFrictionCoefficientVisualuzation, paramFrictionCoefficientVisualuzationMatching;
     private Spinner spinTG;
     private Spinner spinSelectionMode;
     private CheckBox checkVibrotactileFeedback;
@@ -137,8 +135,7 @@ public class FittsTiltSetup extends Activity
      * Called when the activity is first created.
      */
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.setup);
 
@@ -166,31 +163,30 @@ public class FittsTiltSetup extends Activity
         auditoryFeedback = sp.getBoolean("auditoryFeedback", auditoryFeedback);
 
         // get references to widget elements
-        spinParticipant = (Spinner)findViewById(R.id.paramPart);
-        spinSession = (Spinner)findViewById(R.id.paramSess);
-        Spinner spinBlock = (Spinner)findViewById(R.id.paramBlock);
+        spinParticipant = (Spinner) findViewById(R.id.paramPart);
+        spinSession = (Spinner) findViewById(R.id.paramSess);
+        Spinner spinBlock = (Spinner) findViewById(R.id.paramBlock);
         spinFrictionCoefficient = (Spinner) findViewById(R.id.paramFrictionCoefficient);
 
         //Amit code
-        paramFrictionCoefficientVisualuzationMatching =  (Spinner) findViewById(R.id.paramFrictionCoefficientVisualuzationMatching);
+        paramFrictionCoefficientVisualuzationMatching = (Spinner) findViewById(R.id.paramFrictionCoefficientVisualuzationMatching);
         spinFrictionCoefficientVisualuzation = (Spinner) findViewById(R.id.paramFrictionCoefficientVisualuzation);
 
 
-
         spinFlickMult = (Spinner) findViewById(R.id.paramFlicketMultiplier);
-        spinGroup = (Spinner)findViewById(R.id.paramGroup);
-        spinCondition = (Spinner)findViewById(R.id.paramCondition);
-        spinNumTargets = (Spinner)findViewById(R.id.paramTargets);
-        spinAmplitude = (Spinner)findViewById(R.id.paramAmplitude);
-        spinWidth = (Spinner)findViewById(R.id.paramWidth);
-        spinBallScale = (Spinner)findViewById(R.id.paramBallScale);
-        spinOrderOfControl = (Spinner)findViewById(R.id.paramOrderOfControl);
+        spinGroup = (Spinner) findViewById(R.id.paramGroup);
+        spinCondition = (Spinner) findViewById(R.id.paramCondition);
+        spinNumTargets = (Spinner) findViewById(R.id.paramTargets);
+        spinAmplitude = (Spinner) findViewById(R.id.paramAmplitude);
+        spinWidth = (Spinner) findViewById(R.id.paramWidth);
+        spinBallScale = (Spinner) findViewById(R.id.paramBallScale);
+        spinOrderOfControl = (Spinner) findViewById(R.id.paramOrderOfControl);
         spinHand = (Spinner) findViewById(R.id.paramHand);
         spinRadius = (Spinner) findViewById(R.id.paramRaduis);
-        spinTG = (Spinner)findViewById(R.id.paramTG);
-        spinSelectionMode = (Spinner)findViewById(R.id.paramSelectionMode);
-        checkVibrotactileFeedback = (CheckBox)findViewById(R.id.paramVibrotactileFeedback);
-        checkAuditoryFeedback = (CheckBox)findViewById(R.id.paramAuditoryFeedback);
+        spinTG = (Spinner) findViewById(R.id.paramTG);
+        spinSelectionMode = (Spinner) findViewById(R.id.paramSelectionMode);
+        checkVibrotactileFeedback = (CheckBox) findViewById(R.id.paramVibrotactileFeedback);
+        checkAuditoryFeedback = (CheckBox) findViewById(R.id.paramAuditoryFeedback);
 
         // initialise spinner adapters
         ArrayAdapter<CharSequence> adapterPC
@@ -274,8 +270,7 @@ public class FittsTiltSetup extends Activity
     }
 
     // called when the "OK" button is pressed
-    public void clickOK(View view)
-    {
+    public void clickOK(View view) {
         // get user's choices
         String part = participantCode[spinParticipant.getSelectedItemPosition()];
         String sess = sessionCode[spinSession.getSelectedItemPosition()];
@@ -340,8 +335,7 @@ public class FittsTiltSetup extends Activity
     }
 
     // called when the "Save button is pressed
-    public void clickSave(View view)
-    {
+    public void clickSave(View view) {
         spe = sp.edit();
         spe.putString("participantCode", participantCode[spinParticipant.getSelectedItemPosition()]);
         spe.putString("sessionCode", sessionCode[spinSession.getSelectedItemPosition()]);
@@ -365,18 +359,15 @@ public class FittsTiltSetup extends Activity
     }
 
     // called when the "Exit" button is pressed
-    public void clickExit(View view)
-    {
+    public void clickExit(View view) {
         super.onDestroy(); // cleanup
         this.finish(); // terminate
     }
 
     // convoluted way to get gain (should probably use a key-value Map)
-    public int getGain(String orderOfControl, String gainArg)
-    {
+    public int getGain(String orderOfControl, String gainArg) {
         int gain = -1;
-        if (orderOfControl.equals(VELOCITY))
-        {
+        if (orderOfControl.equals(VELOCITY)) {
             if (gainArg.equals(VERY_LOW))
                 gain = GAIN_ARG_VELOCITY_CONTROL[0];
             else if (gainArg.equals(LOW))
@@ -387,8 +378,7 @@ public class FittsTiltSetup extends Activity
                 gain = GAIN_ARG_VELOCITY_CONTROL[3];
             else if (gainArg.equals(VERY_HIGH))
                 gain = GAIN_ARG_VELOCITY_CONTROL[4];
-        } else if (orderOfControl.equals(POSITION))
-        {
+        } else if (orderOfControl.equals(POSITION)) {
             if (gainArg.equals(VERY_LOW))
                 gain = GAIN_ARG_POSITION_CONTROL[0];
             else if (gainArg.equals(LOW))
@@ -400,8 +390,7 @@ public class FittsTiltSetup extends Activity
             else if (gainArg.equals(VERY_HIGH))
                 gain = GAIN_ARG_POSITION_CONTROL[4];
 
-        } else if (orderOfControl.equals(PHYSICS1))
-        {
+        } else if (orderOfControl.equals(PHYSICS1)) {
             if (gainArg.equals(VERY_LOW))
                 gain = GAIN_ARG_PHYSICS1_CONTROL[0];
             else if (gainArg.equals(LOW))
@@ -413,8 +402,7 @@ public class FittsTiltSetup extends Activity
             else if (gainArg.equals(VERY_HIGH))
                 gain = GAIN_ARG_PHYSICS1_CONTROL[4];
 
-        }else if (orderOfControl.equals(FLICKER))
-        {
+        } else if (orderOfControl.equals(FLICKER)) {
             if (gainArg.equals(VERY_LOW))
                 gain = GAIN_ARG_PHYSICS2_CONTROL[0];
             else if (gainArg.equals(LOW))

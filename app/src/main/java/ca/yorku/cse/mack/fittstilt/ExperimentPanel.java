@@ -15,8 +15,7 @@ import android.view.View;
  *
  * @author Scott MacKenziem 2011-2016
  */
-public class ExperimentPanel extends View
-{
+public class ExperimentPanel extends View {
     // size and positioning constants (density-independent pixels)
     final int START_TEXT_SIZE = 18;
     final int GAP = 10; // gap between lines
@@ -48,35 +47,31 @@ public class ExperimentPanel extends View
     //float ballScale;
     boolean readyToDraw;
 
-    public ExperimentPanel(Context contextArg)
-    {
+    public ExperimentPanel(Context contextArg) {
         super(contextArg);
         initialize(contextArg);
     }
 
-    public ExperimentPanel(Context contextArg, AttributeSet attrs)
-    {
+    public ExperimentPanel(Context contextArg, AttributeSet attrs) {
         super(contextArg, attrs);
         initialize(contextArg);
     }
 
-    public ExperimentPanel(Context contextArg, AttributeSet attrs, int defStyle)
-    {
+    public ExperimentPanel(Context contextArg, AttributeSet attrs, int defStyle) {
         super(contextArg, attrs, defStyle);
         initialize(contextArg);
     }
 
     // things that can be initialized from within this View
-    private void initialize(Context c)
-    {
+    private void initialize(Context c) {
         readyToDraw = false; // don't draw UI until ball onWindowFocusChanged finishes in main activity
 
         pixelDensity = c.getResources().getDisplayMetrics().density;
-        gap = GAP * (int)(pixelDensity);
-        startTextSize = (int)(START_TEXT_SIZE * pixelDensity);
-        startCircleRadius = (int)(START_CIRCLE_RADIUS * pixelDensity); // same for practice circle
-        xOffset = (int)(X_OFFSET * pixelDensity);
-        yOffset1 = (int)(Y_OFFSET * pixelDensity);
+        gap = GAP * (int) (pixelDensity);
+        startTextSize = (int) (START_TEXT_SIZE * pixelDensity);
+        startCircleRadius = (int) (START_CIRCLE_RADIUS * pixelDensity); // same for practice circle
+        xOffset = (int) (X_OFFSET * pixelDensity);
+        yOffset1 = (int) (Y_OFFSET * pixelDensity);
         yOffset2 = yOffset1 + 2 * startCircleRadius + startTextSize + gap + 2 * startCircleRadius;
         yOffset3 = yOffset1 + 2 * startCircleRadius + yOffset1 + 2 * startCircleRadius + startTextSize + gap;
 //        if(orderOfControl.equals("Flicker")){
@@ -85,10 +80,10 @@ public class ExperimentPanel extends View
 //            practiceCircle = new Circle(yBall + startCircleRadius, yBall +  yOffset2, startCircleRadius, Circle.NORMAL);
 //        }
 //        else {
-            startCircle = new Circle(xOffset + startCircleRadius, yOffset1 + startCircleRadius, startCircleRadius, Circle
-                    .NORMAL);
-            practiceCircle = new Circle(xOffset + startCircleRadius, yOffset2, startCircleRadius, Circle.NORMAL);
-       // }
+        startCircle = new Circle(xOffset + startCircleRadius, yOffset1 + startCircleRadius, startCircleRadius, Circle
+                .NORMAL);
+        practiceCircle = new Circle(xOffset + startCircleRadius, yOffset2, startCircleRadius, Circle.NORMAL);
+        // }
         // create bitmap for ball (will be replaced with scaled bitmap from main activity (see onWindowFocusChanged)
         ball = BitmapFactory.decodeResource(getResources(), R.drawable.ball);
 
@@ -129,14 +124,13 @@ public class ExperimentPanel extends View
         this.setBackgroundColor(Color.LTGRAY);
     }
 
-    protected void onDraw(Canvas canvas)
-    {
+    protected void onDraw(Canvas canvas) {
         if (!readyToDraw)
             return;
 
         if (waitStartCircleSelect) // draw start circle (and results string)
         {
-            if(orderOfControl.equals("Flicker")){
+            if (orderOfControl.equals("Flicker")) {
                 startCircle.x = startX;
                 startCircle.y = startY;
             }
@@ -146,43 +140,40 @@ public class ExperimentPanel extends View
 
 
             // draw the results text
-                if(orderOfControl.equals("Flicker")){
-                    canvas.drawText(results[0], startCircle.x - 2*gap, startCircle.y + 2*startCircle.radius + gap, startPaint);
+            if (orderOfControl.equals("Flicker")) {
+                canvas.drawText(results[0], startCircle.x - 2 * gap, startCircle.y + 2 * startCircle.radius + gap, startPaint);
 
-                    if(results.length > 1){
-                    for (int i = 1; i < results.length; ++i){
+                if (results.length > 1) {
+                    for (int i = 1; i < results.length; ++i) {
                         canvas.drawText(results[i], xOffset, yOffset1 + 2 * startCircle.radius + (i + 1) * (startTextSize +
                                 gap), startPaint);
-                    }}
+                    }
                 }
-                else{
-                    for (int i = 0; i < results.length; ++i)
-                canvas.drawText(results[i], xOffset, yOffset1 + 2 * startCircle.radius + (i + 1) * (startTextSize +
-                        gap), startPaint);
-                }
+            } else {
+                for (int i = 0; i < results.length; ++i)
+                    canvas.drawText(results[i], xOffset, yOffset1 + 2 * startCircle.radius + (i + 1) * (startTextSize +
+                            gap), startPaint);
+            }
 
             if (waitPracticeCircleSelect) // only at beginning of a block
             {
-                if(orderOfControl.equals("Flicker")){
+                if (orderOfControl.equals("Flicker")) {
                     practiceCircle.x = practiceX;
                     practiceCircle.y = practiceY;
                 }
-                    // draw the practice circle
-                    canvas.drawCircle(practiceCircle.x, practiceCircle.y, practiceCircle.radius, practicePaint);
+                // draw the practice circle
+                canvas.drawCircle(practiceCircle.x, practiceCircle.y, practiceCircle.radius, practicePaint);
 
 
                 // draw the practice greeting (also indicates the order of control, tilt gain, and selection method)
-                if(orderOfControl.equals("Flicker")){
-                    canvas.drawText(practice[0], practiceCircle.x - 2*gap, practiceCircle.y + 2*practiceCircle.radius + gap, practicePaint);
-                    for (int i = 1; i < practice.length; ++i)
-                    {
+                if (orderOfControl.equals("Flicker")) {
+                    canvas.drawText(practice[0], practiceCircle.x - 2 * gap, practiceCircle.y + 2 * practiceCircle.radius + gap, practicePaint);
+                    for (int i = 1; i < practice.length; ++i) {
                         canvas.drawText(practice[i], xOffset, yOffset3 + (i + 1) * (startTextSize + gap), practicePaint);
                     }
 
-                }
-                else{
-                    for (int i = 0; i < practice.length; ++i)
-                    {
+                } else {
+                    for (int i = 0; i < practice.length; ++i) {
                         // Amit changes for readable color of text
                         practicePaint.setColor(0xff000000);
                         canvas.drawText(practice[i], xOffset, yOffset3 + (i + 1) * (startTextSize + gap), practicePaint);
@@ -192,8 +183,9 @@ public class ExperimentPanel extends View
         } else if (!done) // draw task circles
         {
             for (Circle c : taskCircles)
-                if(c != null){
-                canvas.drawCircle(c.x, c.y, c.radius, normalPaint);}
+                if (c != null) {
+                    canvas.drawCircle(c.x, c.y, c.radius, normalPaint);
+                }
 
             // draw target circle last (so it is on top of any overlapping circles)
             canvas.drawCircle(targetCircle.x, targetCircle.y, targetCircle.radius, targetPaint);
