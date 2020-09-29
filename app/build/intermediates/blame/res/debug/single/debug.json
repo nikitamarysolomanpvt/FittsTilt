@@ -1,50 +1,50 @@
 [
     {
-        "merged": "/Users/amitmodak/Downloads/FittsTilt/app/build/intermediates/res/merged/debug/layout_results_dialog.xml.flat",
-        "source": "/Users/amitmodak/Downloads/FittsTilt/app/src/main/res/layout/results_dialog.xml"
+        "merged": "/Users/marysoloman/Documents/FittsTilt/app/build/intermediates/res/merged/debug/drawable-hdpi_ball.png.flat",
+        "source": "/Users/marysoloman/Documents/FittsTilt/app/src/main/res/drawable-hdpi/ball.png"
     },
     {
-        "merged": "/Users/amitmodak/Downloads/FittsTilt/app/build/intermediates/res/merged/debug/layout_spinnerstyle.xml.flat",
-        "source": "/Users/amitmodak/Downloads/FittsTilt/app/src/main/res/layout/spinnerstyle.xml"
+        "merged": "/Users/marysoloman/Documents/FittsTilt/app/build/intermediates/res/merged/debug/raw_click.wav.flat",
+        "source": "/Users/marysoloman/Documents/FittsTilt/app/src/main/res/raw/click.wav"
     },
     {
-        "merged": "/Users/amitmodak/Downloads/FittsTilt/app/build/intermediates/res/merged/debug/drawable-ldpi_icon.png.flat",
-        "source": "/Users/amitmodak/Downloads/FittsTilt/app/src/main/res/drawable-ldpi/icon.png"
+        "merged": "/Users/marysoloman/Documents/FittsTilt/app/build/intermediates/res/merged/debug/drawable-hdpi_ic_grass.png.flat",
+        "source": "/Users/marysoloman/Documents/FittsTilt/app/src/main/res/drawable-hdpi/ic_grass.png"
     },
     {
-        "merged": "/Users/amitmodak/Downloads/FittsTilt/app/build/intermediates/res/merged/debug/raw_click.wav.flat",
-        "source": "/Users/amitmodak/Downloads/FittsTilt/app/src/main/res/raw/click.wav"
+        "merged": "/Users/marysoloman/Documents/FittsTilt/app/build/intermediates/res/merged/debug/drawable-hdpi_ic_wood.png.flat",
+        "source": "/Users/marysoloman/Documents/FittsTilt/app/src/main/res/drawable-hdpi/ic_wood.png"
     },
     {
-        "merged": "/Users/amitmodak/Downloads/FittsTilt/app/build/intermediates/res/merged/debug/drawable-hdpi_ic_grass.png.flat",
-        "source": "/Users/amitmodak/Downloads/FittsTilt/app/src/main/res/drawable-hdpi/ic_grass.png"
+        "merged": "/Users/marysoloman/Documents/FittsTilt/app/build/intermediates/res/merged/debug/drawable-hdpi_icon.png.flat",
+        "source": "/Users/marysoloman/Documents/FittsTilt/app/src/main/res/drawable-hdpi/icon.png"
     },
     {
-        "merged": "/Users/amitmodak/Downloads/FittsTilt/app/build/intermediates/res/merged/debug/drawable-hdpi_ball.png.flat",
-        "source": "/Users/amitmodak/Downloads/FittsTilt/app/src/main/res/drawable-hdpi/ball.png"
+        "merged": "/Users/marysoloman/Documents/FittsTilt/app/build/intermediates/res/merged/debug/layout_spinnerstyle.xml.flat",
+        "source": "/Users/marysoloman/Documents/FittsTilt/app/src/main/res/layout/spinnerstyle.xml"
     },
     {
-        "merged": "/Users/amitmodak/Downloads/FittsTilt/app/build/intermediates/res/merged/debug/drawable-mdpi_icon.png.flat",
-        "source": "/Users/amitmodak/Downloads/FittsTilt/app/src/main/res/drawable-mdpi/icon.png"
+        "merged": "/Users/marysoloman/Documents/FittsTilt/app/build/intermediates/res/merged/debug/drawable-ldpi_icon.png.flat",
+        "source": "/Users/marysoloman/Documents/FittsTilt/app/src/main/res/drawable-ldpi/icon.png"
     },
     {
-        "merged": "/Users/amitmodak/Downloads/FittsTilt/app/build/intermediates/res/merged/debug/layout_main.xml.flat",
-        "source": "/Users/amitmodak/Downloads/FittsTilt/app/src/main/res/layout/main.xml"
+        "merged": "/Users/marysoloman/Documents/FittsTilt/app/build/intermediates/res/merged/debug/drawable-hdpi_ic_glass.png.flat",
+        "source": "/Users/marysoloman/Documents/FittsTilt/app/src/main/res/drawable-hdpi/ic_glass.png"
     },
     {
-        "merged": "/Users/amitmodak/Downloads/FittsTilt/app/build/intermediates/res/merged/debug/drawable-hdpi_ic_wood.png.flat",
-        "source": "/Users/amitmodak/Downloads/FittsTilt/app/src/main/res/drawable-hdpi/ic_wood.png"
+        "merged": "/Users/marysoloman/Documents/FittsTilt/app/build/intermediates/res/merged/debug/layout_main.xml.flat",
+        "source": "/Users/marysoloman/Documents/FittsTilt/app/src/main/res/layout/main.xml"
     },
     {
-        "merged": "/Users/amitmodak/Downloads/FittsTilt/app/build/intermediates/res/merged/debug/drawable-hdpi_ic_glass.png.flat",
-        "source": "/Users/amitmodak/Downloads/FittsTilt/app/src/main/res/drawable-hdpi/ic_glass.png"
+        "merged": "/Users/marysoloman/Documents/FittsTilt/app/build/intermediates/res/merged/debug/layout_setup.xml.flat",
+        "source": "/Users/marysoloman/Documents/FittsTilt/app/src/main/res/layout/setup.xml"
     },
     {
-        "merged": "/Users/amitmodak/Downloads/FittsTilt/app/build/intermediates/res/merged/debug/layout_setup.xml.flat",
-        "source": "/Users/amitmodak/Downloads/FittsTilt/app/src/main/res/layout/setup.xml"
+        "merged": "/Users/marysoloman/Documents/FittsTilt/app/build/intermediates/res/merged/debug/drawable-mdpi_icon.png.flat",
+        "source": "/Users/marysoloman/Documents/FittsTilt/app/src/main/res/drawable-mdpi/icon.png"
     },
     {
-        "merged": "/Users/amitmodak/Downloads/FittsTilt/app/build/intermediates/res/merged/debug/drawable-hdpi_icon.png.flat",
-        "source": "/Users/amitmodak/Downloads/FittsTilt/app/src/main/res/drawable-hdpi/icon.png"
+        "merged": "/Users/marysoloman/Documents/FittsTilt/app/build/intermediates/res/merged/debug/layout_results_dialog.xml.flat",
+        "source": "/Users/marysoloman/Documents/FittsTilt/app/src/main/res/layout/results_dialog.xml"
     }
 ]
