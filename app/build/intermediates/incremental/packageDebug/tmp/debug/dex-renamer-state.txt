@@ -1,4 +1,4 @@
-#Fri Mar 08 02:31:18 EST 2019
-base.0=C\:\\Users\\emerc\\Desktop\\Work\\Projects\\FittsTilt\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\0
+#Tue Mar 17 07:44:15 IST 2020
+base.0=/Users/amitmodak/Downloads/FittsTilt/app/build/intermediates/transforms/dexMerger/debug/0
 path.0=classes.dex
 renamed.0=classes.dex

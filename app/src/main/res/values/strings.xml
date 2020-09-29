@@ -18,10 +18,20 @@
     <string name="paramlabelballscale">Ball scale</string>
     <string name="paramlabelorderofcontroltext">Order of control</string>
     <string name="paramfrictioncoefficient">Friction Coefficient</string>
+
+    <!-- Amit changes -->
+    <string name="paramfrictioncoefficientvisualizationMatching">Visualization Matching</string>
+
+    <string name="paramfrictioncoefficientvisualization">Visualization</string>
+    <!-- Amit ends -->
+
+
     <string name="paramlabeltiltgaintext">Tilt gain</string>
     <string name="paramlabelselectionmodetext">Selection mode</string>
     <string name="paramvibrotactilefeedbacktext">Vibrotactile feedback</string>
     <string name="paramauditoryfeedbacktext">Auditory feedback</string>
     <string name="paramflickvalue">Flicker Multiplier</string>
+    <string name="paramStartRaduis">Start Raduis for Flicker</string>
+    <string name="paramHandVal">What\'s your main hand?</string>
 
 </resources>

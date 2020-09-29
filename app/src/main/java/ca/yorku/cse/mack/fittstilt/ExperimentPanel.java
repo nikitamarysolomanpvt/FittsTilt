@@ -26,12 +26,16 @@ public class ExperimentPanel extends View
     final int Y_OFFSET = 20;
 
     float xBall, yBall;
+    float startX, startY, practiceX, practiceY;
     Bitmap ball; // initialized from main activity (see onWindowFocusChanged)
     Circle[] taskCircles;
     Circle targetCircle; // the destination target to select
     Circle fromTargetCircle; // the source target from where the trial began
     Circle startCircle;
     Circle practiceCircle;
+    Circle startCircleFlick;
+    Circle getPracticeCircleFlick;
+    String orderOfControl;
     boolean done = false;
     boolean waitStartCircleSelect, waitPracticeCircleSelect;
     Paint targetPaint, targetRimPaint, normalPaint, startPaint, practicePaint;
@@ -75,11 +79,16 @@ public class ExperimentPanel extends View
         yOffset1 = (int)(Y_OFFSET * pixelDensity);
         yOffset2 = yOffset1 + 2 * startCircleRadius + startTextSize + gap + 2 * startCircleRadius;
         yOffset3 = yOffset1 + 2 * startCircleRadius + yOffset1 + 2 * startCircleRadius + startTextSize + gap;
-
-        startCircle = new Circle(xOffset + startCircleRadius, yOffset1 + startCircleRadius, startCircleRadius, Circle
-                .NORMAL);
-        practiceCircle = new Circle(xOffset + startCircleRadius, yOffset2, startCircleRadius, Circle.NORMAL);
-
+//        if(orderOfControl.equals("Flicker")){
+//            startCircle = new Circle(xBall + xOffset + startCircleRadius, yBall+yOffset1+ startCircleRadius,
+//                    startCircleRadius, Circle.NORMAL);
+//            practiceCircle = new Circle(yBall + startCircleRadius, yBall +  yOffset2, startCircleRadius, Circle.NORMAL);
+//        }
+//        else {
+            startCircle = new Circle(xOffset + startCircleRadius, yOffset1 + startCircleRadius, startCircleRadius, Circle
+                    .NORMAL);
+            practiceCircle = new Circle(xOffset + startCircleRadius, yOffset2, startCircleRadius, Circle.NORMAL);
+       // }
         // create bitmap for ball (will be replaced with scaled bitmap from main activity (see onWindowFocusChanged)
         ball = BitmapFactory.decodeResource(getResources(), R.drawable.ball);
 
@@ -127,27 +136,64 @@ public class ExperimentPanel extends View
 
         if (waitStartCircleSelect) // draw start circle (and results string)
         {
+            if(orderOfControl.equals("Flicker")){
+                startCircle.x = startX;
+                startCircle.y = startY;
+            }
+
             // draw the start circle
             canvas.drawCircle(startCircle.x, startCircle.y, startCircle.radius, startPaint);
 
+
             // draw the results text
-            for (int i = 0; i < results.length; ++i)
+                if(orderOfControl.equals("Flicker")){
+                    canvas.drawText(results[0], startCircle.x - 2*gap, startCircle.y + 2*startCircle.radius + gap, startPaint);
+
+                    if(results.length > 1){
+                    for (int i = 1; i < results.length; ++i){
+                        canvas.drawText(results[i], xOffset, yOffset1 + 2 * startCircle.radius + (i + 1) * (startTextSize +
+                                gap), startPaint);
+                    }}
+                }
+                else{
+                    for (int i = 0; i < results.length; ++i)
                 canvas.drawText(results[i], xOffset, yOffset1 + 2 * startCircle.radius + (i + 1) * (startTextSize +
                         gap), startPaint);
+                }
 
             if (waitPracticeCircleSelect) // only at beginning of a block
             {
-                // draw the practice circle
-                canvas.drawCircle(practiceCircle.x, practiceCircle.y, practiceCircle.radius, practicePaint);
+                if(orderOfControl.equals("Flicker")){
+                    practiceCircle.x = practiceX;
+                    practiceCircle.y = practiceY;
+                }
+                    // draw the practice circle
+                    canvas.drawCircle(practiceCircle.x, practiceCircle.y, practiceCircle.radius, practicePaint);
+
 
                 // draw the practice greeting (also indicates the order of control, tilt gain, and selection method)
-                for (int i = 0; i < practice.length; ++i)
-                    canvas.drawText(practice[i], xOffset, yOffset3 + (i + 1) * (startTextSize + gap), practicePaint);
+                if(orderOfControl.equals("Flicker")){
+                    canvas.drawText(practice[0], practiceCircle.x - 2*gap, practiceCircle.y + 2*practiceCircle.radius + gap, practicePaint);
+                    for (int i = 1; i < practice.length; ++i)
+                    {
+                        canvas.drawText(practice[i], xOffset, yOffset3 + (i + 1) * (startTextSize + gap), practicePaint);
+                    }
+
+                }
+                else{
+                    for (int i = 0; i < practice.length; ++i)
+                    {
+                        // Amit changes for readable color of text
+                        practicePaint.setColor(0xff000000);
+                        canvas.drawText(practice[i], xOffset, yOffset3 + (i + 1) * (startTextSize + gap), practicePaint);
+                    }
+                }
             }
         } else if (!done) // draw task circles
         {
             for (Circle c : taskCircles)
-                canvas.drawCircle(c.x, c.y, c.radius, normalPaint);
+                if(c != null){
+                canvas.drawCircle(c.x, c.y, c.radius, normalPaint);}
 
             // draw target circle last (so it is on top of any overlapping circles)
             canvas.drawCircle(targetCircle.x, targetCircle.y, targetCircle.radius, targetPaint);

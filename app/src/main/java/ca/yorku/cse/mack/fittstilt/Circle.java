@@ -1,5 +1,9 @@
 package ca.yorku.cse.mack.fittstilt;
 
+import android.util.Log;
+
+import static java.lang.Math.abs;
+
 public class Circle
 {
 	final static int NORMAL = 1;
@@ -22,5 +26,23 @@ public class Circle
 		float dy = yTest - y;
 		float distanceFromCenter = (float)Math.sqrt(dx * dx + dy * dy);
 		return distanceFromCenter + diameterArg / 2f < radius;
-	} 
+	}
+
+    public boolean collidedWithCircle(float xCurrent, float yCurrent, float xPrev, float yPrev, float diameterArg){
+        float dx = xCurrent - x;
+        float dy = yCurrent - y;
+        float dxCurrentPrev = xPrev - x;
+        float dyCurrentPrev = yPrev - y;
+        float distanceFromCenter = (float)Math.sqrt(dx * dx + dy * dy);
+        float distanceFromCenterOld = (float)Math.sqrt(dxCurrentPrev * dxCurrentPrev + dyCurrentPrev * dyCurrentPrev);
+        if(distanceFromCenter > distanceFromCenterOld
+                &&
+                (distanceFromCenterOld < radius*1.5 ))
+        {
+                return true;
+        }
+        else{
+	        return false;
+        }
+    }
 }

@@ -4,9 +4,13 @@
     <string name="button01text">OK</string>
     <string name="button02text">Save</string>
     <string name="button03text">Exit</string>
+    <string name="paramHandVal">What\'s your main hand?</string>
+    <string name="paramStartRaduis">Start Raduis for Flicker</string>
     <string name="paramauditoryfeedbacktext">Auditory feedback</string>
     <string name="paramflickvalue">Flicker Multiplier</string>
     <string name="paramfrictioncoefficient">Friction Coefficient</string>
+    <string name="paramfrictioncoefficientvisualization">Visualization</string>
+    <string name="paramfrictioncoefficientvisualizationMatching">Visualization Matching</string>
     <string name="paramlabelamplitudetext">Target amplitude (A)</string>
     <string name="paramlabelballscale">Ball scale</string>
     <string name="paramlabelblocktext">Block code</string>

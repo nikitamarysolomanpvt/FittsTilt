@@ -1,7 +1,7 @@
 #Internal package file, do not edit.
-#Mon Feb 04 13:57:58 EST 2019
+#Wed Mar 11 01:21:19 IST 2020
 0.baseType=DIRECTORY
-0.base=C\:\\Users\\emerc\\Desktop\\Work\\Projects\\FittsTilt\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\0
+0.base=/Users/amitmodak/Downloads/FittsTilt/app/build/intermediates/transforms/dexMerger/debug/0
 0.path=classes.dex
 0.set=DEX
 count=1
