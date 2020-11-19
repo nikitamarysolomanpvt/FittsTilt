@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Gradle: nl.littlerobots.rxlint:rxlint:1.7.5@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/75578615a0fd84cdc0c338f6f1adcb3f/jetified-rxlint-1.7.5/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/75578615a0fd84cdc0c338f6f1adcb3f/jetified-rxlint-1.7.5/res" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/nl.littlerobots.rxlint/rxlint/1.7.5/f99befe0aa97d9602547404f1a9d2b5fbc43dfe1/rxlint-1.7.5-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/nl.littlerobots.rxlint/rxlint/1.7.5/f99befe0aa97d9602547404f1a9d2b5fbc43dfe1/rxlint-1.7.5-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

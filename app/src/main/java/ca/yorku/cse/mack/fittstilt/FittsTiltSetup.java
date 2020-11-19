@@ -1,8 +1,10 @@
 package ca.yorku.cse.mack.fittstilt;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -10,10 +12,14 @@ import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 @SuppressWarnings("unused")
 public class FittsTiltSetup extends Activity {
   final String MYDEBUG = "MYDEBUG"; // for Log.i messages
-
+  static final Integer WRITE_EXST = 0x3;
+  static final Integer READ_EXST = 0x4;
   // ORDER OF CONTROL
   final static String VELOCITY = "Velocity";
   final static String POSITION = "Position";
@@ -105,6 +111,7 @@ public class FittsTiltSetup extends Activity {
   String[] widthsArray = {"40, 60, 100", "40, 60, 100", "60, 100", "100", "150", "200", "100, 150, 200"};
   String[] ballScaleArray = {"0.5", "0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "1.0"};
   String[] orderOfControlArray = {VELOCITY, VELOCITY, POSITION, PHYSICS1, FLICKER, FRICTION};
+  String[] modeOfInteractionArray = {VELOCITY, FLICKER};
   String[] frictionCoefficientArray = {WOOD_METAL_5, WOOD_METAL_0, WOOD_METAL_1, WOOD_METAL_2, WOOD_METAL_3, WOOD_METAL_4, WOOD_METAL_5, WOOD_METAL_6, WOOD_METAL_7, WOOD_METAL_8, WOOD_METAL_9, WOOD_METAL_10};
   // Amit changes
   String[] frictionCoefficientVisualizationArray = {VISULAZATION_0, VISULAZATION_1, VISULAZATION_2};
@@ -124,7 +131,7 @@ public class FittsTiltSetup extends Activity {
 
   private Spinner spinParticipant, spinSession, spinGroup, spinCondition, spinHand, spinRadius;
   private Spinner spinNumTargets, spinAmplitude, spinWidth, spinBallScale;
-  private Spinner spinOrderOfControl;
+  private Spinner spinOrderOfControl,spinModeOfInteraction;
   private Spinner spinFrictionCoefficient, spinFlickMult, spinFrictionCoefficientVisualuzation, paramFrictionCoefficientVisualuzationMatching;
   private Spinner spinTG;
   private Spinner spinSelectionMode;
@@ -138,7 +145,7 @@ public class FittsTiltSetup extends Activity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.setup);
-
+    askRuntimePermission();
     sp = this.getPreferences(MODE_PRIVATE);
 
     // load preferences
@@ -151,6 +158,7 @@ public class FittsTiltSetup extends Activity {
     numberOfTargetsArray[0] = sp.getString("numberOfTargets", numberOfTargetsArray[0]);
     amplitudesArray[0] = sp.getString("amplitudes", amplitudesArray[0]);
     orderOfControlArray[0] = sp.getString("orderOfControl", orderOfControlArray[0]);
+    modeOfInteractionArray[0] = sp.getString("modeOfInteraction", modeOfInteractionArray[0]);
     frictionCoefficientArray[0] = sp.getString("frictionCoefficient", frictionCoefficientArray[0]);
     radiusArray[0] = sp.getString("radius", radiusArray[0]);
     handArray[0] = sp.getString("hand", handArray[0]);
@@ -181,6 +189,7 @@ public class FittsTiltSetup extends Activity {
     spinWidth = (Spinner) findViewById(R.id.paramWidth);
     spinBallScale = (Spinner) findViewById(R.id.paramBallScale);
     spinOrderOfControl = (Spinner) findViewById(R.id.paramOrderOfControl);
+    spinModeOfInteraction = (Spinner) findViewById(R.id.paramModeOfInteraction);
     spinHand = (Spinner) findViewById(R.id.paramHand);
     spinRadius = (Spinner) findViewById(R.id.paramRaduis);
     spinTG = (Spinner) findViewById(R.id.paramTG);
@@ -228,6 +237,9 @@ public class FittsTiltSetup extends Activity {
     ArrayAdapter<CharSequence> adapterOC
         = new ArrayAdapter<CharSequence>(this, R.layout.spinnerstyle, orderOfControlArray);
     spinOrderOfControl.setAdapter(adapterOC);
+    ArrayAdapter<CharSequence> adapterMOI
+        = new ArrayAdapter<CharSequence>(this, R.layout.spinnerstyle, modeOfInteractionArray);
+    spinModeOfInteraction.setAdapter(adapterMOI);
 
     ArrayAdapter<CharSequence> adapterFriction
         = new ArrayAdapter<CharSequence>(this, R.layout.spinnerstyle, frictionCoefficientArray);
@@ -291,6 +303,7 @@ public class FittsTiltSetup extends Activity {
     String radius = radiusArray[spinRadius.getSelectedItemPosition()];
     String hand = handArray[spinHand.getSelectedItemPosition()];
     String orderOfControl = orderOfControlArray[spinOrderOfControl.getSelectedItemPosition()];
+    String modeOfInteraction = modeOfInteractionArray[spinModeOfInteraction.getSelectedItemPosition()];
     String gainString = gainArray[spinTG.getSelectedItemPosition()];
 
     // actual gain value depends on order of control
@@ -315,6 +328,7 @@ public class FittsTiltSetup extends Activity {
     b.putString("radius", radius);
     b.putString("hand", hand);
     b.putString("orderOfControl", orderOfControl);
+    b.putString("modeOfInteraction", modeOfInteraction);
     b.putString("frictionCoefficient", frictionCoefficient);
     // Amit changes
     b.putString("frictionCoefficientVisualizationMatching", frictionCoefficientVisualizationMatching);
@@ -416,4 +430,54 @@ public class FittsTiltSetup extends Activity {
     }
     return gain;
   }
+
+  public void askRuntimePermission(){
+    askForPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE,WRITE_EXST);
+
+  }
+
+  @Override
+  public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    if(ActivityCompat.checkSelfPermission(this, permissions[0]) == PackageManager.PERMISSION_GRANTED){
+      switch (requestCode) {
+
+        //Write external Storage
+        case 3:
+          if (ContextCompat.checkSelfPermission(FittsTiltSetup.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+            askForPermission(Manifest.permission.READ_EXTERNAL_STORAGE,READ_EXST);
+          break;
+        //Read External Storage
+        case 4:
+          Intent imageIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+          startActivityForResult(imageIntent, 11);
+          break;
+
+      }
+      Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
+    }else{
+      Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+    }
+  }
+
+  private void askForPermission(String permission, Integer requestCode) {
+    if (ContextCompat.checkSelfPermission(FittsTiltSetup.this, permission) != PackageManager.PERMISSION_GRANTED) {
+
+      // Should we show an explanation?
+      if (ActivityCompat.shouldShowRequestPermissionRationale(FittsTiltSetup.this, permission)) {
+
+        //This is called if user has denied the permission before
+        //In this case I am just asking the permission again
+        ActivityCompat.requestPermissions(FittsTiltSetup.this, new String[]{permission}, requestCode);
+
+      } else {
+
+        ActivityCompat.requestPermissions(FittsTiltSetup.this, new String[]{permission}, requestCode);
+      }
+    } else {
+      Toast.makeText(this, "" + permission + " is already granted.", Toast.LENGTH_SHORT).show();
+    }
+
+  }
+
 }

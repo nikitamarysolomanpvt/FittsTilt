@@ -1,24 +1,56 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '28.0.3'
-
+    compileSdkVersion versions.compile_sdk
     defaultConfig {
-        applicationId "ca.yorku.cse.mack.fittstilt"
-        minSdkVersion 13
-        targetSdkVersion 18
+        applicationId 'ca.yorku.cse.mack.fittstilt'
+        minSdkVersion versions.min_sdk
+        targetSdkVersion versions.target_sdk
+        versionCode 1
+        versionName '1.0'
+    }
+    viewBinding {
+        enabled = true
     }
 
     lintOptions {
         checkReleaseBuilds false
         abortOnError false
     }
-
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/proguard/*'
+        exclude 'META-INF/*.version'
+        exclude 'META-INF/*.properties'
+        exclude '/*.properties'
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$versions.kotlin"
+
+    implementation "androidx.appcompat:appcompat:$versions.androidx.appcompat"
+    implementation "androidx.browser:browser:$versions.androidx.browser"
+    implementation "androidx.constraintlayout:constraintlayout:$versions.androidx.constraint_layout"
+    implementation "androidx.core:core-ktx:$versions.androidx.core_ktx"
+    implementation "androidx.dynamicanimation:dynamicanimation:$versions.androidx.dynamicanimation"
+
+
+    debugImplementation "nl.littlerobots.rxlint:rxlint:$versions.rxlint"
 }

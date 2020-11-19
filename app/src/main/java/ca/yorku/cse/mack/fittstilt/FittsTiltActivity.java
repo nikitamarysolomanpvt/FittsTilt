@@ -6,6 +6,7 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.graphics.PointF;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -217,7 +218,7 @@ public class FittsTiltActivity extends Activity implements SensorEventListener {
   int numberOfTargets;
   float[] amplitude, width;
   float ballScale; // scaling factor for ball (relative to smallest width)
-  String orderOfControl;
+  String orderOfControl,modeOfInteraction;
   int radius;
   String hand;
   float frictionCoefficient;
@@ -309,6 +310,7 @@ public class FittsTiltActivity extends Activity implements SensorEventListener {
     // init study parameters
     Bundle b = getIntent().getExtras();
     orderOfControl = b.getString("orderOfControl");
+    modeOfInteraction = b.getString("modeOfInteraction");
     ep = (ExperimentPanel) findViewById(R.id.experimentpanel);
     radius = Integer.parseInt(b.getString("radius"));
     ep.orderOfControl = orderOfControl;
@@ -343,13 +345,18 @@ public class FittsTiltActivity extends Activity implements SensorEventListener {
     screenOrientation = b.getInt("screenOrientation");
     //Reads the touch events if its Flicker
     if (orderOfControl.equals("Flicker")) {
-      ep.setOnTouchListener(new View.OnTouchListener() {
-        @Override
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-          return onTouchFlick(motionEvent);
-        }
+
+      // Listen to position changes
+      ep.setOnPositionChangedListener(point -> {
+        // Use point.x and point.y
+//        ep.setPosition(new PointF(point.x, point.y));
       });
+      ep.setFriction(frictionCoefficient);
+      ep.setPosition(new PointF(0.2F, 0.3F));
+      // Set friction and position
+
     }
+
 
 
 //        ep.setBackground();
@@ -609,25 +616,26 @@ public class FittsTiltActivity extends Activity implements SensorEventListener {
     panelHeight = ep.getHeight();
     xCenter = panelWidth / 2f;
     yCenter = panelHeight / 2f;
-    if (orderOfControl.equals("Flicker")) {
-
-      if (hand.equals("Left")) {
-        ep.xBall = radius;
-        ep.yBall = panelHeight - radius;
-        ep.startX = radius - 300;
-        ep.startY = panelHeight - radius;
-        ep.practiceX = radius;
-        ep.practiceY = panelHeight - radius - 300;
-      } else {
-        ep.xBall = panelWidth - radius;
-        ep.yBall = panelHeight - (radius);
-
-        ep.startX = panelWidth - radius - 300;
-        ep.startY = panelHeight - radius;
-        ep.practiceX = panelWidth - radius;
-        ep.practiceY = panelHeight - radius - 300;
-      }
-    } else {
+//    if (orderOfControl.equals("Flicker")) {
+//
+//      if (hand.equals("Left")) {
+//        ep.xBall = radius;
+//        ep.yBall = panelHeight - radius;
+//        ep.startX = radius - 300;
+//        ep.startY = panelHeight - radius;
+//        ep.practiceX = radius;
+//        ep.practiceY = panelHeight - radius - 300;
+//      } else {
+//        ep.xBall = panelWidth - radius;
+//        ep.yBall = panelHeight - (radius);
+//
+//        ep.startX = panelWidth - radius - 300;
+//        ep.startY = panelHeight - radius;
+//        ep.practiceX = panelWidth - radius;
+//        ep.practiceY = panelHeight - radius - 300;
+//      }
+//    } else
+    {
       ep.xBall = xCenter;
       ep.yBall = yCenter; // start the ball in the center of the display
 
@@ -649,14 +657,15 @@ public class FittsTiltActivity extends Activity implements SensorEventListener {
     // compute scaling factor
     float scaleFactor = span / (largestAmplitude + largestWidth); // scale factor computed
 
-    if (orderOfControl.equals("Flicker")) {
-      // now do the scaling
-      scaleFactor = 1;
-      for (int i = 0; i < amplitude.length; ++i) // scale amplitudes
-        amplitude[i] *= scaleFactor;
-      for (int i = 0; i < width.length; ++i) // scale widths
-        width[i] *= scaleFactor;
-    } else {
+//    if (orderOfControl.equals("Flicker")) {
+//      // now do the scaling
+//      scaleFactor = 1;
+//      for (int i = 0; i < amplitude.length; ++i) // scale amplitudes
+//        amplitude[i] *= scaleFactor;
+//      for (int i = 0; i < width.length; ++i) // scale widths
+//        width[i] *= scaleFactor;
+//    } else
+    {
       // now do the scaling
       for (int i = 0; i < amplitude.length; ++i) // scale amplitudes
         amplitude[i] *= scaleFactor;
@@ -788,43 +797,44 @@ public class FittsTiltActivity extends Activity implements SensorEventListener {
   }
 
   private void configureTaskCircles(int awIdx) {
-    if (orderOfControl.equals("Flicker")) {
-      int i = 0;
-      float radius = (aw[awIdx].a);
-
-      //Getting the angle of the arch via start and end points
-      float xCenter = ep.xBall;
-      float yCenter = ep.yBall;
-      float endX = panelWidth - (panelWidth * 0.9f);
-      float dX = (endX - xCenter);
-      float endY = (float) Math.sqrt((radius * radius) - (dX * dX));
-      float dY = (yCenter - endY) - (yCenter - radius);
-      float dis = (float) Math.sqrt(dX * dX + dY * dY); //distance between the points
-      double a = Math.acos(1 - ((dis * dis) / (2 * (radius * radius)))); //the angle between the points is 1 - (dis^2/2radius^2)
-      float diff = xCenter / numberOfCircles - 1; //Getting the distance between the points
-      float prevPoint = xCenter;
-      if (radius > 700) {
-        while (i < numberOfCircles) {
-          float x = prevPoint;
-          float difX = x - xCenter;
-          float y = (float) Math.sqrt((radius * radius) - (difX * difX));
-          ep.taskCircles[i] = new Circle(x, abs(yCenter - y), aw[awIdx].w / 2f, Circle.NORMAL);
-          prevPoint = prevPoint - diff;
-          i++;
-        }
-      } else {
-        while (i < numberOfCircles) {
-          float x = ep.xBall - (aw[awIdx].a) * (float) Math.cos(a * ((float) i / (numberOfCircles)));
-          if (x < 0) {
-            x = xCenter + x;
-          }
-          float y = ep.yBall - (aw[awIdx].a) * (float) Math.sin(a * ((float) i / (numberOfCircles)));
-          ep.taskCircles[i] = new Circle(abs(x), abs(y), aw[awIdx].w / 2f, Circle.NORMAL);
-          i++;
-        }
-      }
-
-    } else {
+//    if (orderOfControl.equals("Flicker")) {
+//      int i = 0;
+//      float radius = (aw[awIdx].a);
+//
+//      //Getting the angle of the arch via start and end points
+//      float xCenter = ep.xBall;
+//      float yCenter = ep.yBall;
+//      float endX = panelWidth - (panelWidth * 0.9f);
+//      float dX = (endX - xCenter);
+//      float endY = (float) Math.sqrt((radius * radius) - (dX * dX));
+//      float dY = (yCenter - endY) - (yCenter - radius);
+//      float dis = (float) Math.sqrt(dX * dX + dY * dY); //distance between the points
+//      double a = Math.acos(1 - ((dis * dis) / (2 * (radius * radius)))); //the angle between the points is 1 - (dis^2/2radius^2)
+//      float diff = xCenter / numberOfCircles - 1; //Getting the distance between the points
+//      float prevPoint = xCenter;
+//      if (radius > 700) {
+//        while (i < numberOfCircles) {
+//          float x = prevPoint;
+//          float difX = x - xCenter;
+//          float y = (float) Math.sqrt((radius * radius) - (difX * difX));
+//          ep.taskCircles[i] = new Circle(x, abs(yCenter - y), aw[awIdx].w / 2f, Circle.NORMAL);
+//          prevPoint = prevPoint - diff;
+//          i++;
+//        }
+//      } else {
+//        while (i < numberOfCircles) {
+//          float x = ep.xBall - (aw[awIdx].a) * (float) Math.cos(a * ((float) i / (numberOfCircles)));
+//          if (x < 0) {
+//            x = xCenter + x;
+//          }
+//          float y = ep.yBall - (aw[awIdx].a) * (float) Math.sin(a * ((float) i / (numberOfCircles)));
+//          ep.taskCircles[i] = new Circle(abs(x), abs(y), aw[awIdx].w / 2f, Circle.NORMAL);
+//          i++;
+//        }
+//      }
+//
+//    } else
+    {
       for (int i = 0; i < numberOfCircles; ++i) {
         float x = xCenter + (aw[awIdx].a / 2f) * (float) Math.cos(TWO_TIMES_PI * ((float) i / numberOfCircles));
         float y = yCenter + (aw[awIdx].a / 2f) * (float) Math.sin(TWO_TIMES_PI * ((float) i / numberOfCircles));
@@ -1010,7 +1020,7 @@ public class FittsTiltActivity extends Activity implements SensorEventListener {
       ae += t.transformedSelectX;
       maxTilt += maxTiltTrial;
 
-      sb1.append(String.format(Locale.CANADA, "%s,%s,%s,%s,%s,%s,%s,%d,%s,%d,%s,%.1f\n", APP, participantCode,
+      sb1.append(String.format(Locale.CANADA, "%s,%s,%s,%s,%s,%s,%s,%d,%s,%d,%s,%d,%.1f", APP, participantCode,
           sessionCode, blockCode, groupCode, conditionCode, orderOfControl, (int) tiltGain, selectionMode,
           selectionCount, t.getMeasures(), errorCount, maxTiltTrial));
 
@@ -1235,7 +1245,8 @@ public class FittsTiltActivity extends Activity implements SensorEventListener {
         ep.yBall = yCenter + dy;
 
 
-      } else if (orderOfControl.equals("Physics1")) {
+      } else
+        if (orderOfControl.equals("Physics1")) {
         float multiplier = 1; //Multiplier
         float dPitch = Math.round(-pitch);
         float dRoll = Math.round(-roll);
@@ -1302,7 +1313,8 @@ public class FittsTiltActivity extends Activity implements SensorEventListener {
         initPosY = positionY;
 
         Log.e("Info Delta", "Position X:" + positionX + " Position Y:" + positionY);
-      } else if (orderOfControl.equals("Friction")) {
+      } else
+        if (orderOfControl.equals("Friction")) {
 
         float dPitch = Math.round(-pitch);
         float dRoll = Math.round(-roll);
@@ -1373,7 +1385,8 @@ public class FittsTiltActivity extends Activity implements SensorEventListener {
         }
 
 
-      } else if (orderOfControl.equals("Flicker")) {
+      }
+      else if (orderOfControl.equals("Flicker")) {
         //The Flick Order of Control for Testing
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -1487,7 +1500,7 @@ public class FittsTiltActivity extends Activity implements SensorEventListener {
       }
 
 
-      // keep the ball visible
+//       keep the ball visible
 
       ep.xBall = Math.max(0, ep.xBall); // left edge
       ep.xBall = Math.min(panelWidth - ballDiameter, ep.xBall); // right edge
@@ -1526,7 +1539,8 @@ public class FittsTiltActivity extends Activity implements SensorEventListener {
           }
         }
 
-      } else {
+      } else
+      {
         // Is the ball inside target circle?
         if (!ep.waitStartCircleSelect && ep.targetCircle != null
             && ep.targetCircle.inCircle(xBallCenter, yBallCenter, ballDiameter)
@@ -1563,7 +1577,8 @@ public class FittsTiltActivity extends Activity implements SensorEventListener {
         else if (ep.waitPracticeCircleSelect && !sequenceStarted
             && (ep.practiceCircle.inCircle(xBallCenter, yBallCenter, ballDiameter) || ep.practiceCircle.collidedWithCircle(xBallCenter, yBallCenter, prevXposition, prevYposition, ballDiameter)))
           doPracticeCircleClicked();
-      } else {
+      } else
+      {
         if (ep.waitStartCircleSelect && ep.startCircle.inCircle(xBallCenter, yBallCenter, ballDiameter))
           doStartCircleClicked();
         else if (ep.waitPracticeCircleSelect && !sequenceStarted

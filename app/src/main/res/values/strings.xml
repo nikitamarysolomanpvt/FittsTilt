@@ -3,7 +3,7 @@
 
     <string name="app_name">FittsTilt</string>
     <string name="setup_title">Setup</string>
-    <string name="setup_subtitle">(FittsTilt Experiment)</string>
+    <string name="setup_subtitle">(Fitts Flicker)</string>
     <string name="button01text">OK</string>
     <string name="button02text">Save</string>
     <string name="button03text">Exit</string>
@@ -33,5 +33,5 @@
     <string name="paramflickvalue">Flicker Multiplier</string>
     <string name="paramStartRaduis">Start Raduis for Flicker</string>
     <string name="paramHandVal">What\'s your main hand?</string>
-
+    <string name="mode_of_interaction">Mode of Interaction</string>
 </resources>
