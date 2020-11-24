@@ -797,13 +797,14 @@ public class FittsTiltActivity extends Activity implements SensorEventListener {
   }
 
   private void configureTaskCircles(int awIdx) {
+
 //    if (orderOfControl.equals("Flicker")) {
 //      int i = 0;
 //      float radius = (aw[awIdx].a);
 //
 //      //Getting the angle of the arch via start and end points
-//      float xCenter = ep.xBall;
-//      float yCenter = ep.yBall;
+//      float xCenter = ep.getWidth();
+//      float yCenter = (ep.getHeight()/2);
 //      float endX = panelWidth - (panelWidth * 0.9f);
 //      float dX = (endX - xCenter);
 //      float endY = (float) Math.sqrt((radius * radius) - (dX * dX));
@@ -835,10 +836,15 @@ public class FittsTiltActivity extends Activity implements SensorEventListener {
 //
 //    } else
     {
+
       for (int i = 0; i < numberOfCircles; ++i) {
-        float x = xCenter + (aw[awIdx].a / 2f) * (float) Math.cos(TWO_TIMES_PI * ((float) i / numberOfCircles));
-        float y = yCenter + (aw[awIdx].a / 2f) * (float) Math.sin(TWO_TIMES_PI * ((float) i / numberOfCircles));
+        float x = xCenter -(aw[awIdx].a / 1.4f) * (float) Math.sin(Math.PI * ((float) i / numberOfCircles));
+        float y = yCenter +(aw[awIdx].a / 1.4f) * (float) Math.cos(Math.PI* ((float) i / numberOfCircles));
+//        Log.e("i="+i+" xCenter="+xCenter+" yCenter="+yCenter," (awIdx) ="+awIdx+" aw[awIdx]="+aw[awIdx]+" (aw[awIdx].a / 2f)"+(aw[awIdx].a / 2f));
+        Log.e("TAG","(float) Math.cos(TWO_TIMES_PI * ((float) i / numberOfCircles))="+(float) Math.cos(TWO_TIMES_PI * ((float) i / numberOfCircles))+" (float) Math.sin(TWO_TIMES_PI * ((float) i / numberOfCircles))="+(float) Math.sin(TWO_TIMES_PI * ((float) i / numberOfCircles)));
+
         ep.taskCircles[i] = new Circle(x, y, aw[awIdx].w / 2f, Circle.NORMAL);
+        Log.e("x="+x+" y="+y," aw[awIdx].w / 2f="+aw[awIdx].w / 2f);
       }
 
     }
