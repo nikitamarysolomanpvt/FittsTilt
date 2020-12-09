@@ -350,6 +350,8 @@ public class FittsTiltActivity extends Activity implements SensorEventListener {
       ep.setOnPositionChangedListener(point -> {
         // Use point.x and point.y
 //        ep.setPosition(new PointF(point.x, point.y));
+//        if(dwellPending==false)
+//          ep.setPosition(new PointF(point.x, point.y));
       });
       ep.setFriction(frictionCoefficient);
       ep.setPosition(new PointF(0.2F, 0.3F));
@@ -954,14 +956,16 @@ public class FittsTiltActivity extends Activity implements SensorEventListener {
 
   void resetPosition() {
     if (orderOfControl.equals("Flicker")) {
+      ep.stopAnimations();
       startMoving = false;
       canFlick = false;
-      if (hand.equals("Left")) {
-        ep.xBall = radius;
-        ep.yBall = panelHeight - radius;
-      } else {
-        ep.xBall = panelWidth - radius;
-        ep.yBall = panelHeight - radius;
+//      if (hand.equals("Left")) {
+//        ep.xBall = radius;
+//        ep.yBall = panelHeight - radius;
+//      } else
+        {
+        ep.xBall = panelWidth - radius/2;
+        ep.yBall = panelHeight /2;
       }
     }
   }

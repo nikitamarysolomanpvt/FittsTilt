@@ -448,7 +448,7 @@ if(event.getActionMasked()==ACTION_DOWN)
     return (float) this.getHeight() - this.minY;
   }
 
-  private final void stopAnimations() {
+  public final void stopAnimations() {
     FlingAnimation var10000 = this.xFling;
     if (var10000 != null) {
       var10000.cancel();

@@ -2,10 +2,13 @@ package ca.yorku.cse.mack.fittstilt;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
@@ -14,6 +17,10 @@ import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 @SuppressWarnings("unused")
 public class FittsTiltSetup extends Activity {
@@ -138,12 +145,14 @@ public class FittsTiltSetup extends Activity {
   private CheckBox checkVibrotactileFeedback;
   private CheckBox checkAuditoryFeedback;
 
+
   /**
    * Called when the activity is first created.
    */
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    expired();
     setContentView(R.layout.setup);
     askRuntimePermission();
     sp = this.getPreferences(MODE_PRIVATE);
@@ -280,7 +289,62 @@ public class FittsTiltSetup extends Activity {
     checkVibrotactileFeedback.setChecked(vibrotactileFeedback);
     checkAuditoryFeedback.setChecked(auditoryFeedback);
   }
+public void expired(){
+  try {
+    //Dates to compare
+    String CurrentDate=  "11/24/2020";
+    String FinalDate=  "09/26/2020";
 
+    Date date1;
+    Date date2;
+
+    SimpleDateFormat dates = new SimpleDateFormat("MM/dd/yyyy");
+
+    //Setting dates
+    date1 = dates.parse(CurrentDate);
+    date2 = Calendar.getInstance().getTime();
+
+    //Comparing dates
+    long difference = Math.abs(date1.getTime() - date2.getTime());
+    long differenceDates = difference / (24 * 60 * 60 * 1000);
+
+    //Convert long to String
+    String dayDifference = Long.toString(differenceDates);
+if(differenceDates>10)
+{open();}
+    Log.e("HERE","HERE: " + dayDifference);
+
+  } catch (Exception exception) {
+    Log.e("DIDN'T WORK", "exception " + exception);
+  }
+}
+  public void open(){
+    AlertDialog alertDialog1 = new AlertDialog.Builder(
+        FittsTiltSetup.this).create();
+
+    // Setting Dialog Title
+    alertDialog1.setTitle("Alert Dialog");
+
+    // Setting Dialog Message
+    alertDialog1.setMessage("Fitts Flicker app Expired Please contact ");
+
+
+    // Setting OK Button
+    alertDialog1.setButton("OK", new DialogInterface.OnClickListener() {
+
+      public void onClick(DialogInterface dialog, int which) {
+        // Write your code here to execute after dialog
+        // closed
+        finish();
+        Toast.makeText(getApplicationContext(),
+            "You clicked on OK", Toast.LENGTH_SHORT).show();
+      }
+    });
+
+    // Showing Alert Message
+    alertDialog1.show();
+
+  }
   // called when the "OK" button is pressed
   public void clickOK(View view) {
     // get user's choices
